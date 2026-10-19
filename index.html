@@ -1208,6 +1208,179 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    /* Modal de Login de Administrador */
+    .modal-fondo {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: #000000ba;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 1;
+      transition: opacity 190ms ease;
+    }
+
+    .modal-fondo[hidden] {
+      display: none !important;
+    }
+
+    .modal-tarjeta {
+      position: relative;
+      width: min(460px, 100%);
+      padding: 26px;
+      border: 1px solid #ffffff18;
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 24px 60px #000000aa;
+      animation: modalEntrar 240ms var(--spring);
+    }
+
+    @keyframes modalEntrar {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-cabecera {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+
+    .modal-cabecera h2 {
+      margin: 4px 0 0;
+      font-size: 21px;
+      letter-spacing: -0.03em;
+    }
+
+    .modal-cerrar {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-raised);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 15px;
+      transition: color 150ms ease, background 150ms ease, transform 150ms ease;
+    }
+
+    .modal-cerrar:hover {
+      background: #2b2c26;
+      color: var(--text);
+    }
+
+    .modal-cerrar:active {
+      transform: scale(0.92);
+    }
+
+    .modal-descripcion {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    .alerta-error {
+      padding: 12px 14px;
+      border: 1px solid #f17f7355;
+      border-radius: 13px;
+      background: #f17f731c;
+      color: #ff9b91;
+      font-size: 13px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .modal-acciones {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .modal-acciones .boton {
+      flex: 1;
+    }
+
+    .modal-pie-info {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .modal-pie-info code {
+      padding: 2px 5px;
+      border-radius: 5px;
+      background: var(--surface-raised);
+      color: var(--yellow);
+      font-size: 11px;
+    }
+
+    /* Barra de sesión en el panel de administración */
+    .admin-sesion-barra {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 16px 0 20px;
+      padding: 13px 18px;
+      border: 1px solid #91c88938;
+      border-radius: 16px;
+      background: #91c88910;
+    }
+
+    .admin-sesion-datos {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+    }
+
+    .admin-sesion-indicador {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+    }
+
+    .admin-sesion-correo {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .admin-aviso-seguridad {
+      margin: 0 0 20px;
+      padding: 12px 16px;
+      border: 1px solid #f5c8422e;
+      border-radius: 14px;
+      background: #f5c8420e;
+      color: #ede9d0;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .admin-aviso-seguridad strong {
+      color: var(--yellow);
+    }
   </style>
 </head>
 <body>
@@ -1218,7 +1391,7 @@
         <span>Domingo Food</span>
       </button>
       <div class="barra-acciones">
-        <button id="nav-admin" class="boton-secundario" type="button" onclick="irA('admin')" aria-label="Abrir panel de administración de demostración">
+        <button id="nav-admin" class="boton-secundario" type="button" onclick="manejarBotonAdmin()" aria-label="Abrir panel de administración">
           Administrar
         </button>
       </div>
@@ -1329,15 +1502,24 @@
       <div class="titulo-con-retorno">
         <button class="boton-atras" type="button" onclick="irA('inicio')" aria-label="Volver al inicio">←</button>
         <div>
-          <span class="eyebrow">Administración de demostración</span>
+          <span class="eyebrow">Panel de control</span>
           <h1 id="titulo-admin" class="titulo-vista" tabindex="-1">Gestionar menú</h1>
         </div>
       </div>
 
-      <p class="demo-aviso">
-        <strong>Modo demostración local.</strong> Los cambios se guardan solo en el almacenamiento de este navegador.
-        Este panel no tiene autenticación, no escribe en Firestore y no es seguro para uso público ni para proteger información sensible.
-      </p>
+      <div class="admin-sesion-barra">
+        <div class="admin-sesion-datos">
+          <span class="admin-sesion-indicador" aria-hidden="true"></span>
+          <span>Administrador: <strong id="admin-usuario-correo" class="admin-sesion-correo">...</strong></span>
+        </div>
+        <button id="boton-cerrar-sesion" class="boton-secundario" type="button" onclick="cerrarSesionAdmin()">
+          Cerrar sesión
+        </button>
+      </div>
+
+      <div class="admin-aviso-seguridad">
+        <strong>Panel protegido:</strong> Conexión con Firebase Authentication activa. Las operaciones de productos se gestionan y protegen con las reglas de seguridad de Firestore.
+      </div>
 
       <div class="seccion-cabecera">
         <h2>Productos</h2>
@@ -1379,6 +1561,63 @@
       <p id="admin-estado" class="admin-estado" role="status" aria-live="polite"></p>
     </section>
   </main>
+
+  <!-- Modal de Inicio de Sesión de Administrador -->
+  <div id="modal-login-admin" class="modal-fondo" hidden role="dialog" aria-modal="true" aria-labelledby="modal-login-titulo">
+    <div class="modal-tarjeta">
+      <div class="modal-cabecera">
+        <div>
+          <span class="eyebrow">Acceso restringido</span>
+          <h2 id="modal-login-titulo">Administración Domingo Food</h2>
+        </div>
+        <button type="button" class="modal-cerrar" onclick="cerrarModalLoginAdmin()" aria-label="Cerrar ventana de inicio de sesión">✕</button>
+      </div>
+      <p class="modal-descripcion">
+        Ingresa con tu correo y contraseña autorizados para acceder al panel de administración.
+      </p>
+
+      <form id="formulario-login-admin" class="formulario" novalidate>
+        <div class="campo">
+          <label for="admin-email">Correo electrónico</label>
+          <input
+            id="admin-email"
+            name="email"
+            type="email"
+            autocomplete="username"
+            placeholder="admin@domingofood.com"
+            required
+          >
+        </div>
+
+        <div class="campo">
+          <label for="admin-password">Contraseña</label>
+          <input
+            id="admin-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="••••••••"
+            required
+          >
+        </div>
+
+        <div id="admin-login-error" class="alerta-error" hidden role="alert"></div>
+
+        <div class="modal-acciones">
+          <button id="boton-login-admin" class="boton" type="submit">
+            <span>Iniciar sesión</span>
+          </button>
+          <button type="button" class="boton-secundario" onclick="cerrarModalLoginAdmin()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+
+      <div class="modal-pie-info">
+        <small>Solo cuentas autorizadas en la colección <code>admins</code> de Firestore pueden gestionar el menú.</small>
+      </div>
+    </div>
+  </div>
 
   <footer class="pie">
     <div class="contenedor">Domingo Food · Gracias por elegirnos</div>
@@ -1669,7 +1908,7 @@
       });
     }
 
-    function guardarCambiosProducto(formulario) {
+    async function guardarCambiosProducto(formulario) {
       const id = formulario.dataset.productoId;
       const producto = MENU.find(item => item.id === id);
       if (!producto) {
@@ -1685,7 +1924,7 @@
         descripcion: String(datos.get("descripcion")).trim(),
         imagen: String(datos.get("imagen")).trim(),
         alt: String(datos.get("nombre")).trim(),
-        categoria: String(datos.get("categoria")),
+        categoria: String(datos.get("categoria")).trim(),
         disponible: datos.has("disponible")
       };
       if (!productoMenuValido(actualizado)) {
@@ -1693,29 +1932,46 @@
         return;
       }
 
-      MENU = MENU.map(item => item.id === id ? actualizado : item);
-      if (!guardarMenu()) {
-        MENU = MENU.map(item => item.id === id ? producto : item);
-        return;
+      mostrarEstadoAdmin("Guardando cambios...", false);
+
+      if (window.guardarProductoFirestore && window.usuarioAdminActual && window.usuarioAdminActual.autorizado) {
+        try {
+          await window.guardarProductoFirestore(id, actualizado);
+          mostrarEstadoAdmin("✓ Cambios guardados correctamente en Firestore.");
+        } catch (error) {
+          console.error("Error guardando en Firestore:", error);
+          const detalle = error.code === "permission-denied"
+            ? "Permiso denegado: El usuario no cuenta con autorización en la colección 'admins' de Firestore."
+            : (error.message || "Error al actualizar en Firestore.");
+          mostrarEstadoAdmin("Error: " + detalle, true);
+          return;
+        }
+      } else {
+        MENU = MENU.map(item => item.id === id ? actualizado : item);
+        if (!guardarMenu()) {
+          MENU = MENU.map(item => item.id === id ? producto : item);
+          return;
+        }
+        mostrarEstadoAdmin("Cambios guardados localmente.");
       }
+
       renderizarAdmin();
       renderizarProductos();
       if (productoSeleccionado && productoSeleccionado.id === id) {
         productoSeleccionado = actualizado;
       }
-      mostrarEstadoAdmin("Cambios guardados en este navegador.");
     }
 
-    function agregarProductoAdmin(evento) {
+    async function agregarProductoAdmin(evento) {
       evento.preventDefault();
       const formulario = evento.currentTarget;
       const datos = new FormData(formulario);
       const nombre = String(datos.get("nombre")).trim();
       const producto = {
-        id: "demo-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7),
+        id: "temp-" + Date.now().toString(36),
         nombre,
         precio: Number(datos.get("precio")),
-        categoria: String(datos.get("categoria")),
+        categoria: String(datos.get("categoria")).trim(),
         descripcion: String(datos.get("descripcion")).trim(),
         imagen: String(datos.get("imagen")).trim(),
         alt: nombre,
@@ -1730,32 +1986,71 @@
         return;
       }
 
-      MENU = [...MENU, producto];
-      if (!guardarMenu()) {
-        MENU = MENU.filter(item => item.id !== producto.id);
-        return;
+      mostrarEstadoAdmin("Añadiendo producto...", false);
+
+      if (window.agregarProductoFirestore && window.usuarioAdminActual && window.usuarioAdminActual.autorizado) {
+        try {
+          const nuevoId = await window.agregarProductoFirestore(producto);
+          producto.id = nuevoId;
+          formulario.reset();
+          document.getElementById("admin-agregar").open = false;
+          mostrarEstadoAdmin("✓ Producto añadido correctamente a Firestore.");
+        } catch (error) {
+          console.error("Error al añadir en Firestore:", error);
+          const detalle = error.code === "permission-denied"
+            ? "Permiso denegado: El usuario no cuenta con autorización en la colección 'admins' de Firestore."
+            : (error.message || "Error al añadir a Firestore.");
+          mostrarEstadoAdmin("Error: " + detalle, true);
+          return;
+        }
+      } else {
+        producto.id = "demo-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7);
+        MENU = [...MENU, producto];
+        if (!guardarMenu()) {
+          MENU = MENU.filter(item => item.id !== producto.id);
+          return;
+        }
+        formulario.reset();
+        document.getElementById("admin-agregar").open = false;
+        mostrarEstadoAdmin("Producto añadido al menú local.");
       }
-      formulario.reset();
-      document.getElementById("admin-agregar").open = false;
+
       renderizarAdmin();
       renderizarProductos();
-      mostrarEstadoAdmin("Producto añadido al menú de demostración.");
     }
 
-    function eliminarProducto(id) {
+    async function eliminarProducto(id) {
       const producto = MENU.find(item => item.id === id);
-      if (!producto || !window.confirm("¿Eliminar " + producto.nombre + " del menú de demostración?")) {
+      if (!producto || !window.confirm("¿Eliminar " + producto.nombre + " del menú?")) {
         return;
       }
-      const anterior = MENU;
-      MENU = MENU.filter(item => item.id !== id);
-      if (!guardarMenu()) {
-        MENU = anterior;
-        return;
+
+      mostrarEstadoAdmin("Eliminando producto...", false);
+
+      if (window.eliminarProductoFirestore && window.usuarioAdminActual && window.usuarioAdminActual.autorizado) {
+        try {
+          await window.eliminarProductoFirestore(id);
+          mostrarEstadoAdmin("✓ Producto eliminado de Firestore.");
+        } catch (error) {
+          console.error("Error al eliminar de Firestore:", error);
+          const detalle = error.code === "permission-denied"
+            ? "Permiso denegado: El usuario no cuenta con autorización en la colección 'admins' de Firestore."
+            : (error.message || "Error al eliminar de Firestore.");
+          mostrarEstadoAdmin("Error: " + detalle, true);
+          return;
+        }
+      } else {
+        const anterior = MENU;
+        MENU = MENU.filter(item => item.id !== id);
+        if (!guardarMenu()) {
+          MENU = anterior;
+          return;
+        }
+        mostrarEstadoAdmin("Producto eliminado localmente.");
       }
+
       renderizarAdmin();
       renderizarProductos();
-      mostrarEstadoAdmin("Producto eliminado del menú de demostración.");
     }
 
     function restablecerMenu() {
@@ -2037,6 +2332,11 @@
         return;
       }
 
+      if (vista === "admin" && (!window.usuarioAdminActual || !window.usuarioAdminActual.autorizado)) {
+        abrirModalLoginAdmin();
+        return;
+      }
+
       const token = ++tokenTransicionVista;
       const anterior = document.getElementById("vista-" + vistaActual);
       const destino = document.getElementById("vista-" + vista);
@@ -2101,6 +2401,64 @@
       destino.inert = false;
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
+    window.usuarioAdminActual = null;
+
+    function manejarBotonAdmin() {
+      if (window.usuarioAdminActual && window.usuarioAdminActual.autorizado) {
+        irA("admin");
+      } else {
+        abrirModalLoginAdmin();
+      }
+    }
+
+    function abrirModalLoginAdmin() {
+      const modal = document.getElementById("modal-login-admin");
+      if (!modal) return;
+      modal.hidden = false;
+      const errorBox = document.getElementById("admin-login-error");
+      if (errorBox) {
+        errorBox.hidden = true;
+        errorBox.textContent = "";
+      }
+      const emailInput = document.getElementById("admin-email");
+      if (emailInput) {
+        emailInput.focus();
+      }
+    }
+
+    function cerrarModalLoginAdmin() {
+      const modal = document.getElementById("modal-login-admin");
+      if (!modal) return;
+      modal.hidden = true;
+      const errorBox = document.getElementById("admin-login-error");
+      if (errorBox) {
+        errorBox.hidden = true;
+        errorBox.textContent = "";
+      }
+      const navAdmin = document.getElementById("nav-admin");
+      if (navAdmin) {
+        navAdmin.focus();
+      }
+    }
+
+    async function cerrarSesionAdmin() {
+      if (window.ejecutarLogoutAdmin) {
+        await window.ejecutarLogoutAdmin();
+      } else {
+        window.usuarioAdminActual = null;
+      }
+      irA("inicio");
+    }
+
+    window.addEventListener("keydown", evento => {
+      if (evento.key === "Escape") {
+        const modal = document.getElementById("modal-login-admin");
+        if (modal && !modal.hidden) {
+          cerrarModalLoginAdmin();
+        }
+      }
+    });
 
     function actualizarTipoEntrega() {
       const domicilio = document.getElementById("tipo-entrega").value === "domicilio";
@@ -2206,43 +2564,292 @@
     const NOMBRE_COLECCION = "productos";
     const estado = document.getElementById("estado-firestore");
     const reintentar = document.getElementById("reintentar-firestore");
-    let firestoreDb;
+    let firestoreDb = null;
+    let authInstance = null;
 
     function mostrarEstado(mensaje, tipo) {
-      estado.textContent = mensaje;
-      estado.dataset.estado = tipo;
+      if (estado) {
+        estado.textContent = mensaje;
+        estado.dataset.estado = tipo;
+      }
     }
 
+    function escapeHtml(texto) {
+      const span = document.createElement("span");
+      span.textContent = texto;
+      return span.innerHTML;
+    }
+
+    function actualizarAdminUI(user) {
+      const correoElem = document.getElementById("admin-usuario-correo");
+      if (correoElem) {
+        correoElem.textContent = user ? (user.email || user.uid) : "...";
+      }
+      const navAdmin = document.getElementById("nav-admin");
+      if (navAdmin) {
+        if (user) {
+          navAdmin.title = "Sesión activa: " + (user.email || user.uid);
+        } else {
+          navAdmin.title = "Abrir panel de administración";
+        }
+      }
+    }
+
+    // Inicialización de Firebase (App, Firestore y Auth)
+    async function obtenerFirebase() {
+      if (firestoreDb && authInstance) {
+        return { firestoreDb, auth: authInstance };
+      }
+
+      const [
+        { initializeApp },
+        { getFirestore },
+        { getAuth }
+      ] = await Promise.all([
+        import("https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js"),
+        import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js"),
+        import("https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js")
+      ]);
+
+      const app = initializeApp(firebaseConfig);
+      firestoreDb = getFirestore(app);
+      authInstance = getAuth(app);
+      return { firestoreDb, auth: authInstance };
+    }
+
+    // Verificación de si el usuario autenticado tiene permisos de administrador en Firestore
+    async function verificarPermisoAdmin(user) {
+      if (!user || !user.uid) return false;
+      try {
+        const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
+        if (!firestoreDb) await obtenerFirebase();
+
+        // 1. Comprobar si existe documento con el UID en la colección 'admins'
+        const refUid = doc(firestoreDb, "admins", user.uid);
+        const snapUid = await getDoc(refUid);
+        if (snapUid.exists()) {
+          return true;
+        }
+
+        // 2. Comprobar si existe documento con el correo electrónico en la colección 'admins'
+        if (user.email) {
+          const refEmail = doc(firestoreDb, "admins", user.email.toLowerCase().trim());
+          const snapEmail = await getDoc(refEmail);
+          if (snapEmail.exists()) {
+            return true;
+          }
+        }
+      } catch (err) {
+        console.warn("Verificación de admin en Firestore:", err);
+      }
+      return false;
+    }
+
+    // Funciones de administración expuestas para sincronizar con Firestore
+    window.guardarProductoFirestore = async function(id, datos) {
+      const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
+      if (!firestoreDb) await obtenerFirebase();
+
+      const docRef = doc(firestoreDb, NOMBRE_COLECCION, id);
+      await updateDoc(docRef, {
+        nombre: datos.nombre,
+        precio: datos.precio,
+        categoria: datos.categoria,
+        descripcion: datos.descripcion,
+        imagen: datos.imagen,
+        activo: datos.disponible,
+        orden: datos.orden || 1
+      });
+      await cargarDesdeFirestore();
+    };
+
+    window.agregarProductoFirestore = async function(datos) {
+      const { collection, addDoc } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
+      if (!firestoreDb) await obtenerFirebase();
+
+      const nuevoDoc = await addDoc(collection(firestoreDb, NOMBRE_COLECCION), {
+        nombre: datos.nombre,
+        precio: datos.precio,
+        categoria: datos.categoria,
+        descripcion: datos.descripcion,
+        imagen: datos.imagen,
+        activo: true,
+        orden: MENU.length + 1
+      });
+      await cargarDesdeFirestore();
+      return nuevoDoc.id;
+    };
+
+    window.eliminarProductoFirestore = async function(id) {
+      const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
+      if (!firestoreDb) await obtenerFirebase();
+
+      const docRef = doc(firestoreDb, NOMBRE_COLECCION, id);
+      await deleteDoc(docRef);
+      await cargarDesdeFirestore();
+    };
+
+    window.ejecutarLogoutAdmin = async function() {
+      try {
+        const { signOut } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js");
+        if (!authInstance) await obtenerFirebase();
+        await signOut(authInstance);
+      } catch (err) {
+        console.error("Error al cerrar sesión:", err);
+      }
+      window.usuarioAdminActual = null;
+      actualizarAdminUI(null);
+    };
+
+    // Manejar envío del formulario de inicio de sesión
+    const formLogin = document.getElementById("formulario-login-admin");
+    const errorBox = document.getElementById("admin-login-error");
+    const botonLogin = document.getElementById("boton-login-admin");
+
+    if (formLogin) {
+      formLogin.addEventListener("submit", async evento => {
+        evento.preventDefault();
+        const emailInput = document.getElementById("admin-email");
+        const passwordInput = document.getElementById("admin-password");
+        const email = emailInput ? emailInput.value.trim() : "";
+        const password = passwordInput ? passwordInput.value : "";
+
+        if (!email || !password) {
+          if (errorBox) {
+            errorBox.textContent = "Por favor completa el correo y la contraseña.";
+            errorBox.hidden = false;
+          }
+          return;
+        }
+
+        if (errorBox) {
+          errorBox.hidden = true;
+          errorBox.textContent = "";
+        }
+        if (botonLogin) {
+          botonLogin.disabled = true;
+          botonLogin.innerHTML = "<span>Iniciando sesión...</span>";
+        }
+
+        try {
+          const { signInWithEmailAndPassword, signOut } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js");
+          await obtenerFirebase();
+
+          const credencial = await signInWithEmailAndPassword(authInstance, email, password);
+          const user = credencial.user;
+
+          // Doble verificación: comprobar que esté autorizado en Firestore
+          const esAutorizado = await verificarPermisoAdmin(user);
+          if (!esAutorizado) {
+            await signOut(authInstance);
+            window.usuarioAdminActual = null;
+            actualizarAdminUI(null);
+            if (errorBox) {
+              errorBox.innerHTML =
+                "<strong>Acceso denegado:</strong> La cuenta <em>" + escapeHtml(user.email || email) + "</em> existe en Firebase Authentication pero <strong>no está registrada como administrador autorizado</strong> en Firestore.<br><br>" +
+                "<small>Para autorizarla, añade un documento a la colección <code>admins</code> de Firebase Console con el ID <code>" + escapeHtml(user.uid) + "</code> o con el correo <code>" + escapeHtml((user.email || email).toLowerCase()) + "</code>.</small>";
+              errorBox.hidden = false;
+            }
+            return;
+          }
+
+          // Autenticado y autorizado con éxito
+          window.usuarioAdminActual = {
+            uid: user.uid,
+            email: user.email,
+            autorizado: true
+          };
+          actualizarAdminUI(user);
+          cerrarModalLoginAdmin();
+          irA("admin");
+        } catch (error) {
+          console.error("Error en autenticación:", error);
+          let mensaje = "No se pudo iniciar sesión. Comprueba tus credenciales.";
+          if (error.code === "auth/invalid-credential" || error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
+            mensaje = "Correo o contraseña incorrectos.";
+          } else if (error.code === "auth/invalid-email") {
+            mensaje = "El formato del correo electrónico no es válido.";
+          } else if (error.code === "auth/too-many-requests") {
+            mensaje = "Demasiados intentos fallidos. Intenta más tarde.";
+          } else if (error.code === "auth/network-request-failed") {
+            mensaje = "Error de conexión con Firebase. Revisa tu red.";
+          }
+          if (errorBox) {
+            errorBox.textContent = mensaje;
+            errorBox.hidden = false;
+          }
+        } finally {
+          if (botonLogin) {
+            botonLogin.disabled = false;
+            botonLogin.innerHTML = "<span>Iniciar sesión</span>";
+          }
+        }
+      });
+    }
+
+    // Configuración del observador de estado de autenticación (persistencia de sesión)
+    (async () => {
+      try {
+        const { onAuthStateChanged, signOut } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js");
+        await obtenerFirebase();
+
+        onAuthStateChanged(authInstance, async user => {
+          if (user) {
+            const autorizado = await verificarPermisoAdmin(user);
+            if (autorizado) {
+              window.usuarioAdminActual = {
+                uid: user.uid,
+                email: user.email,
+                autorizado: true
+              };
+              actualizarAdminUI(user);
+            } else {
+              await signOut(authInstance);
+              window.usuarioAdminActual = null;
+              actualizarAdminUI(null);
+              if (vistaActual === "admin") {
+                irA("inicio");
+              }
+            }
+          } else {
+            window.usuarioAdminActual = null;
+            actualizarAdminUI(null);
+            if (vistaActual === "admin") {
+              irA("inicio");
+            }
+          }
+        });
+      } catch (err) {
+        console.warn("No se pudo iniciar el observador de autenticación:", err);
+      }
+    })();
+
+    // Carga inicial y sincronización de Firestore
     async function cargarDesdeFirestore() {
       reintentar.hidden = true;
       reintentar.disabled = true;
-      mostrarEstado("Cargando menú desde Firestore; mientras tanto se muestra el menú de respaldo.", "cargando");
+      mostrarEstado("Cargando menú desde Firestore...", "cargando");
 
       try {
-        const [{ initializeApp }, { getFirestore, collection, getDocs }] = await Promise.all([
-          import("https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js"),
-          import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js")
-        ]);
-
+        const { collection, getDocs } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
         if (!firestoreDb) {
-          const app = initializeApp(firebaseConfig);
-          firestoreDb = getFirestore(app);
+          await obtenerFirebase();
         }
 
         const resultado = await getDocs(collection(firestoreDb, NOMBRE_COLECCION));
         if (resultado.empty) {
           mostrarEstado(
-            "La colección productos está vacía. Se conserva el menú local de respaldo; añade documentos para publicar el menú.",
+            "La colección productos está vacía. Se conserva el menú local de respaldo; añade productos desde el panel de administración.",
             "error"
           );
           reintentar.hidden = false;
           return;
         }
 
-        const activos = resultado.docs
-          .map(documento => ({ id: documento.id, ...documento.data() }))
-          .filter(producto => producto.activo === true);
-        const validos = activos.filter(producto =>
+        const todos = resultado.docs
+          .map(documento => ({ id: documento.id, ...documento.data() }));
+
+        const validos = todos.filter(producto =>
           typeof producto.nombre === "string" &&
           producto.nombre.trim() !== "" &&
           typeof producto.precio === "number" &&
@@ -2253,10 +2860,8 @@
           typeof producto.descripcion === "string" &&
           producto.descripcion.trim() !== "" &&
           typeof producto.imagen === "string" &&
-          (producto.imagen.trim() === "" || /^https?:\/\//i.test(producto.imagen.trim())) &&
-          typeof producto.orden === "number" &&
-          Number.isFinite(producto.orden)
-        ).map(producto => ({
+          (producto.imagen.trim() === "" || /^https?:\/\//i.test(producto.imagen.trim()))
+        ).map((producto, idx) => ({
           id: producto.id,
           nombre: producto.nombre.trim(),
           precio: producto.precio,
@@ -2264,27 +2869,16 @@
           descripcion: producto.descripcion.trim(),
           imagen: producto.imagen.trim(),
           alt: producto.nombre.trim(),
-          disponible: true,
-          orden: producto.orden
+          disponible: producto.activo !== false,
+          orden: typeof producto.orden === "number" && Number.isFinite(producto.orden) ? producto.orden : idx + 1
         })).sort((a, b) => a.orden - b.orden || a.nombre.localeCompare(b.nombre, "es"));
 
-        if (activos.length > 0 && validos.length === 0) {
-          throw new Error("Los documentos activos no coinciden con el esquema esperado.");
+        if (todos.length > 0 && validos.length === 0) {
+          throw new Error("Los documentos en Firestore no coinciden con el esquema esperado.");
         }
 
         window.aplicarMenuFirestore(validos);
-        if (activos.length === 0) {
-          mostrarEstado("Firestore está conectado, pero no hay productos marcados como activos.", "conectado");
-        } else if (validos.length < activos.length) {
-          mostrarEstado(
-            "Menú cargado desde Firestore. Se omitieron " +
-              (activos.length - validos.length) +
-              " documentos activos con campos inválidos.",
-            "error"
-          );
-        } else {
-          mostrarEstado("Menú actualizado desde Firestore.", "conectado");
-        }
+        mostrarEstado("Menú sincronizado con Firestore.", "conectado");
       } catch (error) {
         console.error("No se pudo cargar el menú de Firestore; se mantiene el menú de respaldo.", error);
         const codigo = typeof error.code === "string" ? error.code : "";
