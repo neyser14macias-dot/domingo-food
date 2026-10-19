@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111210">
+  <title>Domingo Food | Pide algo rico</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111210;
+      --surface: #1b1c19;
+      --surface-raised: #22231f;
+      --line: #30312c;
+      --text: #f5f4ed;
+      --muted: #a09f94;
+      --yellow: #f5c842;
+      --yellow-hover: #ffda63;
+      --green: #91c889;
+      --danger: #f17f73;
+      --radius: 22px;
+      --shadow: 0 16px 45px #00000042;
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding-bottom: calc(100px + env(safe-area-inset-bottom));
+      background:
+        radial-gradient(ellipse at 82% -12%, #f5c84213, transparent 36rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 3px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .contenedor {
+      width: min(1160px, calc(100% - 48px));
+      margin-inline: auto;
+    }
+
+    .barra {
+      position: sticky;
+      z-index: 5;
+      top: 0;
+      border-bottom: 1px solid #ffffff0c;
+      background: #111210eF;
+      backdrop-filter: blur(18px);
+    }
+
+    .barra-interior {
+      display: flex;
+      min-height: 76px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .marca {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 850;
+      letter-spacing: -0.5px;
+    }
+
+    .marca-icono {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--yellow);
+      color: #191811;
+      font-size: 22px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      min-width: 0;
+      min-height: calc(100vh - 186px);
+      padding-top: 30px;
+    }
+
+    .vista {
+      grid-area: 1 / 1;
+      width: 100%;
+      min-width: 0;
+      align-self: start;
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      transition:
+        opacity 190ms ease,
+        transform 280ms var(--spring);
+    }
+
+    .vista.saliendo {
+      opacity: 0;
+      transform: translate3d(-12px, 0, 0);
+      pointer-events: none;
+    }
+
+    .vista.entrando {
+      opacity: 0;
+      transform: translate3d(12px, 0, 0);
+      pointer-events: none;
+    }
+
+    .bienvenida {
+      display: grid;
+      grid-template-columns: 1.04fr 0.96fr;
+      min-height: 330px;
+      overflow: hidden;
+      border: 1px solid #ffffff12;
+      border-radius: 30px;
+      background: linear-gradient(120deg, #23231d, #191a17 56%, #30291a);
+      box-shadow: var(--shadow);
+    }
+
+    .bienvenida-texto {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: clamp(28px, 5vw, 58px);
+    }
+
+    .eyebrow {
+      margin-bottom: 13px;
+      color: var(--yellow);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    .bienvenida h1 {
+      max-width: 480px;
+      margin-bottom: 13px;
+      font-size: clamp(38px, 5vw, 62px);
+      line-height: 0.99;
+      letter-spacing: -0.065em;
+    }
+
+    .bienvenida-texto > p {
+      max-width: 420px;
+      margin-bottom: 23px;
+      color: #c1c0b6;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .bienvenida-imagen {
+      position: relative;
+      min-height: 280px;
+    }
+
+    .bienvenida-imagen::after {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #23231d 0%, #23231d12 37%, #1112100a 100%);
+      content: "";
+    }
+
+    .bienvenida-imagen img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .boton {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--yellow);
+      color: #1b1a14;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 850;
+      transition: background 150ms ease, transform 150ms ease;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .boton:hover {
+      transform: translateY(-1px);
+      background: var(--yellow-hover);
+    }
+
+    .boton:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: none;
+    }
+
+    .boton-secundario {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--surface-raised);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .boton-secundario:hover {
+      border-color: #55554a;
+      background: #292a25;
+    }
+
+    .seccion {
+      margin-top: 37px;
+      scroll-margin-bottom: 125px;
+    }
+
+    .seccion-cabecera {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 17px;
+    }
+
+    .seccion-cabecera h2,
+    .titulo-vista {
+      margin-bottom: 0;
+      font-size: clamp(23px, 3vw, 29px);
+      letter-spacing: -0.045em;
+    }
+
+    .seccion-cabecera p {
+      margin-bottom: 2px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .filtros {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding: 2px 2px 12px;
+      scroll-margin-bottom: 125px;
+      scrollbar-width: thin;
+    }
+
+    .filtro {
+      flex: 0 0 auto;
+      min-height: 38px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      background: var(--surface);
+      color: #cecdc2;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .filtro[aria-pressed="true"] {
+      border-color: var(--yellow);
+      background: var(--yellow);
+      color: #1b1a14;
+    }
+
+    .buscador {
+      position: relative;
+      display: flex;
+      width: min(100%, 390px);
+      align-items: center;
+    }
+
+    .buscador-icono {
+      position: absolute;
+      left: 14px;
+      color: var(--muted);
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    .buscador input,
+    .campo input,
+    .campo select {
+      width: 100%;
+      min-height: 46px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .buscador input {
+      padding-left: 42px;
+    }
+
+    input::placeholder {
+      color: #828177;
+    }
+
+    .rejilla-productos {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .tarjeta-producto {
+      overflow: hidden;
+      border: 1px solid #ffffff10;
+      border-radius: var(--radius);
+      background: var(--surface);
+      transition: transform 220ms var(--spring), border-color 180ms ease;
+    }
+
+    .tarjeta-producto:hover {
+      transform: translateY(-3px);
+      border-color: #f5c84266;
+    }
+
+    .producto-abrir {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .producto-imagen {
+      display: block;
+      width: 100%;
+      height: 206px;
+      object-fit: cover;
+      background: var(--surface-raised);
+      transition: transform 500ms var(--spring);
+    }
+
+    .tarjeta-producto:hover .producto-imagen {
+      transform: scale(1.025);
+    }
+
+    .producto-contenido {
+      min-width: 0;
+      padding: 16px 17px 17px;
+    }
+
+    .producto-categoria {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--yellow);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .producto-nombre {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .producto-descripcion {
+      display: -webkit-box;
+      min-height: 38px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .producto-pie {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .precio {
+      font-size: 18px;
+      font-weight: 850;
+    }
+
+    .agregar-rapido {
+      display: grid;
+      width: 39px;
+      height: 39px;
+      place-items: center;
+      border: 0;
+      border-radius: 13px;
+      background: var(--yellow);
+      color: #191811;
+      cursor: pointer;
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    .agregar-rapido:hover {
+      background: var(--yellow-hover);
+    }
+
+    .sin-resultados {
+      grid-column: 1 / -1;
+      padding: 30px;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .titulo-con-retorno {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin: 14px 0 22px;
+    }
+
+    .titulo-vista {
+      margin: 0;
+    }
+
+    .boton-atras {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .detalle {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      overflow: hidden;
+      border: 1px solid #ffffff12;
+      border-radius: 28px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .detalle-imagen {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 440px;
+      object-fit: cover;
+      background: var(--surface-raised);
+    }
+
+    .detalle-contenido {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: clamp(24px, 5vw, 50px);
+    }
+
+    .detalle-contenido h2 {
+      margin: 5px 0 12px;
+      font-size: clamp(30px, 4vw, 43px);
+      letter-spacing: -0.06em;
+    }
+
+    .detalle-descripcion {
+      margin-bottom: 24px;
+      color: #bcbbb1;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .detalle-precio {
+      margin-top: auto;
+      margin-bottom: 20px;
+      font-size: 28px;
+      font-weight: 850;
+    }
+
+    .detalle-contenido .boton {
+      width: 100%;
+      min-height: 52px;
+    }
+
+    .carrito-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.8fr);
+      align-items: start;
+      gap: 20px;
+      margin: 14px 0 34px;
+    }
+
+    .panel {
+      padding: 23px;
+      border: 1px solid #ffffff12;
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .panel h2 {
+      margin-bottom: 5px;
+      font-size: 20px;
+      letter-spacing: -0.035em;
+    }
+
+    .panel-subtitulo {
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    #carrito {
+      min-height: 46px;
+    }
+
+    .carrito-vacio {
+      padding: 18px 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .fila-carrito {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .articulo-nombre {
+      margin-bottom: 5px;
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    .articulo-precio {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .controles-cantidad {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .boton-cantidad {
+      display: grid;
+      width: 35px;
+      height: 35px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--surface-raised);
+      color: var(--yellow);
+      cursor: pointer;
+      font-size: 20px;
+      transition: transform 150ms var(--spring), background 150ms ease;
+    }
+
+    .boton-cantidad:active {
+      transform: scale(0.88);
+    }
+
+    .cantidad {
+      min-width: 16px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .resumen-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 18px;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .resumen-total strong {
+      color: var(--yellow);
+      font-size: 25px;
+      letter-spacing: -0.04em;
+    }
+
+    .acciones-carrito {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 17px;
+    }
+
+    .formulario {
+      display: grid;
+      gap: 13px;
+    }
+
+    .campo {
+      display: grid;
+      gap: 7px;
+    }
+
+    .campo label {
+      color: #deddd4;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .campo select {
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, #b9b8ad 50%), linear-gradient(135deg, #b9b8ad 50%, transparent 50%);
+      background-position: calc(100% - 17px) 19px, calc(100% - 12px) 19px;
+      background-repeat: no-repeat;
+      background-size: 5px 5px, 5px 5px;
+      padding-right: 34px;
+    }
+
+    .ayuda {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .boton-whatsapp {
+      width: 100%;
+      min-height: 49px;
+      margin-top: 2px;
+    }
+
+    .pie {
+      padding: 18px 0 26px;
+      color: #828177;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .nav-inferior {
+      position: fixed;
+      z-index: 10;
+      right: 50%;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      left: auto;
+      display: flex;
+      justify-content: center;
+      width: min(360px, calc(100% - 32px));
+      padding: 6px;
+      transform: translateX(50%);
+      border: 1px solid #ffffff29;
+      border-radius: 999px;
+      background:
+        linear-gradient(145deg, #ffffff17, #ffffff06 48%, #ffffff0d),
+        #2425208c;
+      box-shadow:
+        0 18px 48px #00000070,
+        0 3px 12px #00000035,
+        inset 0 1px 0 #ffffff35,
+        inset 0 -1px 0 #ffffff08;
+      -webkit-backdrop-filter: blur(28px) saturate(175%);
+      backdrop-filter: blur(28px) saturate(175%);
+      isolation: isolate;
+    }
+
+    .nav-interior {
+      position: relative;
+      display: grid;
+      width: 100%;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .nav-indicador {
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: calc((100% - 8px) / 2);
+      border: 1px solid #ffffff20;
+      border-radius: 999px;
+      background: linear-gradient(145deg, #ffffff1c, #ffffff08);
+      box-shadow:
+        0 2px 10px #00000024,
+        inset 0 1px 0 #ffffff30;
+      transform: translate3d(0, 0, 0);
+      transition: transform 520ms var(--spring);
+      pointer-events: none;
+    }
+
+    .nav-interior[data-active="carrito"] .nav-indicador {
+      transform: translate3d(calc(100% + 8px), 0, 0);
+    }
+
+    .nav-boton {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-height: 50px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 750;
+      transition: color 220ms ease, transform 180ms var(--spring);
+    }
+
+    .nav-boton[aria-current="page"] {
+      color: var(--text);
+    }
+
+    .nav-icono {
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .contador-carrito {
+      display: grid;
+      min-width: 19px;
+      height: 19px;
+      place-items: center;
+      padding-inline: 5px;
+      border-radius: 99px;
+      background: var(--yellow);
+      color: #191811;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .contador-carrito.bump {
+      animation: contador-bump 280ms var(--spring);
+    }
+
+    @keyframes contador-bump {
+      50% { transform: scale(1.2); }
+    }
+
+    .fila-carrito {
+      animation: fila-entrada 180ms ease both;
+    }
+
+    @keyframes fila-entrada {
+      from { opacity: 0.65; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (min-width: 761px) {
+      body {
+        padding-bottom: calc(100px + env(safe-area-inset-bottom));
+      }
+    }
+
+    @media (max-width: 800px) {
+      .rejilla-productos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .carrito-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .contenedor {
+        width: calc(100% - 28px);
+      }
+
+      .barra-interior {
+        min-height: 65px;
+      }
+
+      main {
+        padding-top: 18px;
+      }
+
+      .bienvenida {
+        grid-template-columns: 1fr;
+        border-radius: 24px;
+      }
+
+      .bienvenida-texto {
+        padding: 27px 23px 24px;
+      }
+
+      .bienvenida h1 {
+        max-width: 410px;
+        font-size: clamp(39px, 11vw, 52px);
+      }
+
+      .bienvenida-texto > p {
+        font-size: 14px;
+      }
+
+      .bienvenida-imagen {
+        min-height: 195px;
+        max-height: 220px;
+      }
+
+      .bienvenida-imagen::after {
+        background: linear-gradient(180deg, #23231d18, transparent 35%);
+      }
+
+      .seccion {
+        margin-top: 28px;
+      }
+
+      .seccion-cabecera {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .buscador {
+        width: 100%;
+      }
+
+      .rejilla-productos {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .tarjeta-producto {
+        display: grid;
+        grid-template-columns: 39% minmax(0, 1fr);
+        align-items: stretch;
+      }
+
+      .producto-abrir {
+        grid-column: 2;
+        grid-row: 1;
+        padding: 13px 14px 4px;
+      }
+
+      .producto-imagen {
+        height: 165px;
+        min-height: 165px;
+        grid-column: 1;
+        grid-row: 1 / 3;
+      }
+
+      .producto-contenido {
+        padding: 0;
+      }
+
+      .producto-categoria {
+        display: none;
+      }
+
+      .producto-descripcion {
+        min-height: 0;
+        margin-bottom: 8px;
+        font-size: 11px;
+      }
+
+      .producto-pie {
+        grid-column: 2;
+        grid-row: 2;
+        padding: 0 14px 13px;
+      }
+
+      .producto-nombre {
+        font-size: 16px;
+      }
+
+      .agregar-rapido {
+        width: 35px;
+        height: 35px;
+      }
+
+      .detalle {
+        grid-template-columns: 1fr;
+        border-radius: 23px;
+      }
+
+      .detalle-imagen {
+        height: 260px;
+        min-height: 0;
+        max-height: 42vh;
+      }
+
+      .detalle-contenido {
+        min-height: 300px;
+        padding: 23px;
+      }
+
+      .panel {
+        padding: 19px;
+      }
+    }
+
+    @media (max-width: 370px) {
+      .tarjeta-producto {
+        grid-template-columns: 35% minmax(0, 1fr);
+      }
+
+      .controles-cantidad {
+        gap: 7px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .vista,
+      .nav-indicador,
+      .tarjeta-producto,
+      .producto-imagen {
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="barra">
+    <div class="contenedor barra-interior">
+      <button class="marca" type="button" onclick="irA('inicio')" aria-label="Domingo Food, ir al inicio">
+        <span class="marca-icono" aria-hidden="true">🍔</span>
+        <span>Domingo Food</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="contenedor">
+    <section id="vista-inicio" class="vista" aria-labelledby="titulo-inicio">
+      <div class="bienvenida">
+        <div class="bienvenida-texto">
+          <h1 id="titulo-inicio" tabindex="-1">Hoy se come bien.</h1>
+          <p>Buenos ingredientes, antojos sencillos y pedidos sin complicaciones.</p>
+          <button class="boton" type="button" onclick="document.getElementById('menu').scrollIntoView({ behavior: 'smooth' })">
+            Explorar menú <span aria-hidden="true">↓</span>
+          </button>
+        </div>
+        <div class="bienvenida-imagen">
+          <img
+            src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1200&q=88"
+            alt="Hamburguesa recién preparada con ingredientes frescos"
+            fetchpriority="high"
+          >
+        </div>
+      </div>
+
+      <section id="menu" class="seccion" aria-labelledby="titulo-menu">
+        <div class="seccion-cabecera">
+          <div>
+            <h2 id="titulo-menu">¿Qué se te antoja?</h2>
+          </div>
+          <label class="buscador">
+            <span class="buscador-icono" aria-hidden="true">⌕</span>
+            <input id="buscador" type="search" aria-label="Buscar productos en el menú" placeholder="Buscar en el menú..." autocomplete="off">
+          </label>
+        </div>
+
+        <div class="filtros" role="group" aria-label="Filtrar productos por categoría">
+          <button class="filtro" type="button" data-categoria="Todos" aria-pressed="true">Todos</button>
+          <button class="filtro" type="button" data-categoria="Tacos" aria-pressed="false">Tacos</button>
+          <button class="filtro" type="button" data-categoria="Hamburguesas" aria-pressed="false">Hamburguesas</button>
+          <button class="filtro" type="button" data-categoria="Acompañamientos" aria-pressed="false">Acompañamientos</button>
+        </div>
+
+        <div id="productos" class="rejilla-productos" aria-live="polite"></div>
+      </section>
+    </section>
+
+    <section id="vista-detalle" class="vista" aria-labelledby="detalle-nombre" hidden>
+      <div class="titulo-con-retorno">
+        <button class="boton-atras" type="button" onclick="irA('inicio')" aria-label="Volver al inicio">←</button>
+        <h1 class="titulo-vista">Detalle del producto</h1>
+      </div>
+      <article id="detalle-producto" class="detalle"></article>
+    </section>
+
+    <section id="vista-carrito" class="vista" aria-labelledby="titulo-carrito" hidden>
+      <div class="titulo-con-retorno">
+        <button class="boton-atras" type="button" onclick="irA('inicio')" aria-label="Volver al inicio">←</button>
+        <div>
+          <span class="eyebrow">Tu selección</span>
+          <h1 id="titulo-carrito" class="titulo-vista" tabindex="-1">Tu carrito</h1>
+        </div>
+      </div>
+
+      <div class="carrito-layout">
+        <section class="panel" aria-labelledby="titulo-resumen">
+          <h2 id="titulo-resumen">Resumen del pedido</h2>
+          <p class="panel-subtitulo">Revisa los productos y las cantidades.</p>
+          <div id="carrito" aria-live="polite"></div>
+          <div class="resumen-total">
+            <span>Total</span>
+            <strong id="total">$0.00</strong>
+          </div>
+          <div class="acciones-carrito">
+            <button class="boton-secundario" type="button" onclick="vaciarCarrito()">Vaciar carrito</button>
+            <button class="boton-secundario" type="button" onclick="irA('inicio')">Seguir explorando</button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="titulo-entrega">
+          <h2 id="titulo-entrega">Datos de entrega</h2>
+          <p class="panel-subtitulo">Completa tus datos para enviar el pedido.</p>
+          <form id="formulario-pedido" class="formulario">
+            <div class="campo">
+              <label for="nombre-cliente">Nombre</label>
+              <input id="nombre-cliente" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required>
+            </div>
+            <div class="campo">
+              <label for="tipo-entrega">Tipo de entrega</label>
+              <select id="tipo-entrega" name="tipo-entrega">
+                <option value="domicilio">Domicilio</option>
+                <option value="retiro">Retiro en el local</option>
+              </select>
+            </div>
+            <div class="campo" id="campo-direccion">
+              <label for="direccion">Dirección</label>
+              <input id="direccion" name="direccion" type="text" autocomplete="street-address" placeholder="Calle, número y referencia" required>
+            </div>
+            <p class="ayuda">Se abrirá WhatsApp con el resumen listo para enviar. El pedido se confirma al enviarlo desde WhatsApp. No se realizan pagos en esta página.</p>
+            <button id="boton-whatsapp" class="boton boton-whatsapp" type="submit">Enviar pedido por WhatsApp <span aria-hidden="true">↗</span></button>
+          </form>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <div class="contenedor">Domingo Food · Gracias por elegirnos</div>
+  </footer>
+
+  <nav class="nav-inferior" aria-label="Navegación principal">
+    <div id="nav-interior" class="nav-interior" data-active="inicio">
+      <span class="nav-indicador" aria-hidden="true"></span>
+      <button id="nav-inicio" class="nav-boton" type="button" onclick="irA('inicio')" aria-current="page">
+        <span class="nav-icono" aria-hidden="true">⌂</span>
+        <span>Inicio</span>
+      </button>
+      <button id="nav-carrito" class="nav-boton" type="button" onclick="irA('carrito')">
+        <span class="nav-icono" aria-hidden="true">▣</span>
+        <span>Carrito</span>
+        <span id="contador-carrito" class="contador-carrito" aria-label="0 productos en el carrito">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    const WHATSAPP_NEGOCIO = "";
+    const CLAVE_CARRITO = "domingoFoodCarrito";
+    const MENU = [
+      {
+        nombre: "Tacos de carne",
+        precio: 2.50,
+        categoria: "Tacos",
+        descripcion: "Carne sazonada, cilantro fresco y un toque de limón.",
+        imagen: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1000&q=85",
+        alt: "Tacos de carne servidos con cilantro y limón"
+      },
+      {
+        nombre: "Hamburguesa",
+        precio: 3.50,
+        categoria: "Hamburguesas",
+        descripcion: "Jugosa, con queso y vegetales frescos en pan tostado.",
+        imagen: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1000&q=85",
+        alt: "Hamburguesa con queso, vegetales y pan tostado"
+      },
+      {
+        nombre: "Papas fritas",
+        precio: 1.50,
+        categoria: "Acompañamientos",
+        descripcion: "Doradas y crujientes, ideales para acompañar.",
+        imagen: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=1000&q=85",
+        alt: "Papas fritas doradas recién preparadas"
+      }
+    ];
+    let productos = [];
+    let total = 0;
+    let categoriaActual = "Todos";
+    let productoSeleccionado = null;
+    let vistaActual = "inicio";
+    let tokenTransicionVista = 0;
+
+    function cargarProductos() {
+      const guardados = localStorage.getItem(CLAVE_CARRITO);
+      if (guardados === null) {
+        return [];
+      }
+
+      let productosGuardados;
+      try {
+        productosGuardados = JSON.parse(guardados);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          console.error("No se pudo restaurar el carrito: los datos guardados no son válidos.", error);
+          return [];
+        }
+        throw error;
+      }
+
+      if (
+        !Array.isArray(productosGuardados) ||
+        !productosGuardados.every(producto =>
+          producto !== null &&
+          typeof producto === "object" &&
+          !Array.isArray(producto) &&
+          typeof producto.nombre === "string" &&
+          producto.nombre.trim() !== "" &&
+          typeof producto.precio === "number" &&
+          Number.isFinite(producto.precio) &&
+          producto.precio >= 0 &&
+          (producto.cantidad === undefined ||
+            (Number.isSafeInteger(producto.cantidad) && producto.cantidad > 0))
+        )
+      ) {
+        console.error("No se pudo restaurar el carrito: los datos guardados tienen un formato inválido.");
+        return [];
+      }
+
+      return productosGuardados.reduce((lista, guardado) => {
+        const cantidad = guardado.cantidad === undefined ? 1 : guardado.cantidad;
+        const existente = lista.find(producto =>
+          producto.nombre === guardado.nombre && producto.precio === guardado.precio
+        );
+        if (existente) {
+          existente.cantidad += cantidad;
+        } else {
+          lista.push({ nombre: guardado.nombre, precio: guardado.precio, cantidad });
+        }
+        return lista;
+      }, []);
+    }
+
+    function guardarProductos() {
+      try {
+        localStorage.setItem(CLAVE_CARRITO, JSON.stringify(productos));
+      } catch (error) {
+        console.error("No se pudo guardar el carrito en este dispositivo.", error);
+      }
+    }
+
+    function agregar(nombre, precio) {
+      const existente = productos.find(producto =>
+        producto.nombre === nombre && producto.precio === precio
+      );
+      if (existente) {
+        existente.cantidad += 1;
+      } else {
+        productos.push({ nombre, precio, cantidad: 1 });
+      }
+      actualizarCarrito();
+    }
+
+    function quitar(indice) {
+      const producto = productos[indice];
+      if (!producto) {
+        return;
+      }
+      producto.cantidad -= 1;
+      if (producto.cantidad === 0) {
+        productos.splice(indice, 1);
+      }
+      actualizarCarrito();
+    }
+
+    function vaciarCarrito() {
+      productos = [];
+      actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+      guardarProductos();
+      total = productos.reduce((suma, producto) =>
+        suma + producto.precio * producto.cantidad, 0
+      );
+
+      const lista = document.getElementById("carrito");
+      lista.replaceChildren();
+
+      if (productos.length === 0) {
+        const vacio = document.createElement("p");
+        vacio.className = "carrito-vacio";
+        vacio.textContent = "Tu carrito está vacío. Vuelve al inicio para elegir algo rico.";
+        lista.appendChild(vacio);
+      }
+
+      productos.forEach((producto, indice) => {
+        const subtotal = producto.precio * producto.cantidad;
+        const fila = document.createElement("div");
+        fila.className = "fila-carrito";
+
+        const detalle = document.createElement("div");
+        const nombre = document.createElement("div");
+        nombre.className = "articulo-nombre";
+        nombre.textContent = producto.nombre;
+
+        const precio = document.createElement("div");
+        precio.className = "articulo-precio";
+        precio.textContent = "$" + producto.precio.toFixed(2) +
+          " c/u · Subtotal $" + subtotal.toFixed(2);
+        detalle.append(nombre, precio);
+
+        const controles = document.createElement("div");
+        controles.className = "controles-cantidad";
+
+        const menos = document.createElement("button");
+        menos.className = "boton-cantidad";
+        menos.type = "button";
+        menos.textContent = "−";
+        menos.setAttribute("aria-label", "Quitar una unidad de " + producto.nombre);
+        menos.onclick = () => quitar(indice);
+
+        const cantidad = document.createElement("span");
+        cantidad.className = "cantidad";
+        cantidad.textContent = String(producto.cantidad);
+        cantidad.setAttribute("aria-label", "Cantidad: " + producto.cantidad);
+
+        const mas = document.createElement("button");
+        mas.className = "boton-cantidad";
+        mas.type = "button";
+        mas.textContent = "+";
+        mas.setAttribute("aria-label", "Agregar una unidad de " + producto.nombre);
+        mas.onclick = () => agregar(producto.nombre, producto.precio);
+
+        controles.append(menos, cantidad, mas);
+        fila.append(detalle, controles);
+        lista.appendChild(fila);
+      });
+
+      document.getElementById("total").textContent = "$" + total.toFixed(2);
+      const unidades = productos.reduce((suma, producto) => suma + producto.cantidad, 0);
+      const contador = document.getElementById("contador-carrito");
+      contador.textContent = String(unidades);
+      contador.setAttribute(
+        "aria-label",
+        unidades + (unidades === 1 ? " producto en el carrito" : " productos en el carrito")
+      );
+      contador.classList.remove("bump");
+      void contador.offsetWidth;
+      contador.classList.add("bump");
+      document.getElementById("boton-whatsapp").disabled = productos.length === 0;
+    }
+
+    function renderizarProductos() {
+      const consulta = document.getElementById("buscador").value.trim().toLocaleLowerCase("es");
+      const coincidencias = MENU.filter(producto => {
+        const coincideCategoria =
+          categoriaActual === "Todos" || producto.categoria === categoriaActual;
+        const coincideBusqueda =
+          (producto.nombre + " " + producto.descripcion + " " + producto.categoria)
+            .toLocaleLowerCase("es")
+            .includes(consulta);
+        return coincideCategoria && coincideBusqueda;
+      });
+
+      const contenedor = document.getElementById("productos");
+      contenedor.replaceChildren();
+
+      if (coincidencias.length === 0) {
+        const mensaje = document.createElement("p");
+        mensaje.className = "sin-resultados";
+        mensaje.textContent = "No encontramos productos con esa búsqueda.";
+        contenedor.appendChild(mensaje);
+        return;
+      }
+
+      coincidencias.forEach(producto => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "tarjeta-producto";
+
+        const imagen = document.createElement("img");
+        imagen.className = "producto-imagen";
+        imagen.src = producto.imagen;
+        imagen.alt = producto.alt;
+        imagen.loading = "lazy";
+
+        const abrir = document.createElement("button");
+        abrir.className = "producto-abrir";
+        abrir.type = "button";
+        abrir.setAttribute("aria-label", "Ver detalle de " + producto.nombre);
+        abrir.onclick = () => verDetalle(producto.nombre);
+
+        const contenido = document.createElement("div");
+        contenido.className = "producto-contenido";
+        const nombre = document.createElement("span");
+        nombre.className = "producto-nombre";
+        nombre.textContent = producto.nombre;
+        const descripcion = document.createElement("span");
+        descripcion.className = "producto-descripcion";
+        descripcion.textContent = producto.descripcion;
+        contenido.append(nombre, descripcion);
+        abrir.appendChild(contenido);
+
+        const pie = document.createElement("div");
+        pie.className = "producto-pie";
+        const precio = document.createElement("span");
+        precio.className = "precio";
+        precio.textContent = "$" + producto.precio.toFixed(2);
+        const agregarRapido = document.createElement("button");
+        agregarRapido.className = "agregar-rapido";
+        agregarRapido.type = "button";
+        agregarRapido.textContent = "+";
+        agregarRapido.setAttribute("aria-label", "Agregar " + producto.nombre + " al carrito");
+        agregarRapido.onclick = () => agregar(producto.nombre, producto.precio);
+        pie.append(precio, agregarRapido);
+
+        tarjeta.append(imagen, abrir, pie);
+        contenedor.appendChild(tarjeta);
+      });
+    }
+
+    function verDetalle(nombre) {
+      productoSeleccionado = MENU.find(producto => producto.nombre === nombre);
+      if (!productoSeleccionado) {
+        return;
+      }
+
+      const articulo = document.getElementById("detalle-producto");
+      articulo.replaceChildren();
+
+      const imagen = document.createElement("img");
+      imagen.className = "detalle-imagen";
+      imagen.src = productoSeleccionado.imagen;
+      imagen.alt = productoSeleccionado.alt;
+
+      const contenido = document.createElement("div");
+      contenido.className = "detalle-contenido";
+      const categoria = document.createElement("span");
+      categoria.className = "eyebrow";
+      categoria.textContent = productoSeleccionado.categoria;
+      const titulo = document.createElement("h2");
+      titulo.id = "detalle-nombre";
+      titulo.tabIndex = -1;
+      titulo.textContent = productoSeleccionado.nombre;
+      const descripcion = document.createElement("p");
+      descripcion.className = "detalle-descripcion";
+      descripcion.textContent = productoSeleccionado.descripcion;
+      const precio = document.createElement("div");
+      precio.className = "detalle-precio";
+      precio.textContent = "$" + productoSeleccionado.precio.toFixed(2);
+      const boton = document.createElement("button");
+      boton.className = "boton";
+      boton.type = "button";
+      boton.textContent = "Agregar al carrito";
+      boton.onclick = () => {
+        agregar(productoSeleccionado.nombre, productoSeleccionado.precio);
+        irA("carrito");
+      };
+      contenido.append(categoria, titulo, descripcion, precio, boton);
+      articulo.append(imagen, contenido);
+      irA("detalle");
+    }
+
+    async function irA(vista) {
+      const vistas = ["inicio", "detalle", "carrito"];
+      if (!vistas.includes(vista) || vista === vistaActual) {
+        return;
+      }
+
+      const token = ++tokenTransicionVista;
+      const anterior = document.getElementById("vista-" + vistaActual);
+      const destino = document.getElementById("vista-" + vista);
+      vistas.forEach(nombre => {
+        const elemento = document.getElementById("vista-" + nombre);
+        if (elemento !== anterior && elemento !== destino) {
+          elemento.hidden = true;
+          elemento.inert = true;
+          elemento.classList.remove("saliendo", "entrando");
+        }
+      });
+      destino.hidden = false;
+      destino.inert = false;
+      destino.classList.remove("saliendo");
+      destino.classList.add("entrando");
+      anterior.inert = true;
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          destino.classList.remove("entrando");
+          anterior.classList.add("saliendo");
+        });
+      });
+
+      vistaActual = vista;
+      document.getElementById("nav-interior").dataset.active =
+        vista === "carrito" ? "carrito" : "inicio";
+      const navInicio = document.getElementById("nav-inicio");
+      const navCarrito = document.getElementById("nav-carrito");
+      if (vista === "inicio") {
+        navInicio.setAttribute("aria-current", "page");
+      } else {
+        navInicio.removeAttribute("aria-current");
+      }
+      if (vista === "carrito") {
+        navCarrito.setAttribute("aria-current", "page");
+      } else {
+        navCarrito.removeAttribute("aria-current");
+      }
+      const encabezado = document.getElementById(
+        vista === "detalle" ? "detalle-nombre" :
+          vista === "carrito" ? "titulo-carrito" : "titulo-inicio"
+      );
+      encabezado.focus({ preventScroll: true });
+
+      await new Promise(resolve => window.setTimeout(resolve, 300));
+      if (token !== tokenTransicionVista) {
+        return;
+      }
+      anterior.hidden = true;
+      anterior.inert = true;
+      anterior.classList.remove("saliendo");
+      destino.inert = false;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function actualizarTipoEntrega() {
+      const domicilio = document.getElementById("tipo-entrega").value === "domicilio";
+      const campo = document.getElementById("campo-direccion");
+      const direccion = document.getElementById("direccion");
+      campo.hidden = !domicilio;
+      direccion.required = domicilio;
+      if (!domicilio) {
+        direccion.value = "";
+      }
+    }
+
+    function pedir() {
+      if (productos.length === 0) {
+        alert("Primero agrega un producto.");
+        return;
+      }
+
+      const nombre = document.getElementById("nombre-cliente").value.trim();
+      const tipoEntrega = document.getElementById("tipo-entrega").value;
+      const direccion = document.getElementById("direccion").value.trim();
+      if (!nombre) {
+        alert("Escribe tu nombre para continuar.");
+        document.getElementById("nombre-cliente").focus();
+        return;
+      }
+      if (tipoEntrega === "domicilio" && !direccion) {
+        alert("Escribe tu dirección para la entrega a domicilio.");
+        document.getElementById("direccion").focus();
+        return;
+      }
+
+      const lineas = [
+        "Hola, quiero hacer este pedido en Domingo Food:",
+        "",
+        "Nombre: " + nombre,
+        "Entrega: " + (tipoEntrega === "domicilio" ? "Domicilio" : "Retiro en el local")
+      ];
+      if (tipoEntrega === "domicilio") {
+        lineas.push("Dirección: " + direccion);
+      }
+      lineas.push("", "Pedido:");
+      productos.forEach(producto => {
+        lineas.push(
+          "- " + producto.nombre + " x" + producto.cantidad +
+          " ($" + (producto.precio * producto.cantidad).toFixed(2) + ")"
+        );
+      });
+      lineas.push("", "Total: $" + total.toFixed(2));
+
+      const numero = WHATSAPP_NEGOCIO.replace(/\D/g, "");
+      const destino = numero
+        ? "https://wa.me/" + numero
+        : "https://wa.me/";
+      window.open(
+        destino + "?text=" + encodeURIComponent(lineas.join("\n")),
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }
+
+    document.getElementById("buscador").addEventListener("input", renderizarProductos);
+    document.querySelectorAll(".filtro").forEach(boton => {
+      boton.addEventListener("click", () => {
+        categoriaActual = boton.dataset.categoria;
+        document.querySelectorAll(".filtro").forEach(filtro => {
+          filtro.setAttribute("aria-pressed", String(filtro === boton));
+        });
+        renderizarProductos();
+      });
+    });
+    document.getElementById("tipo-entrega").addEventListener("change", actualizarTipoEntrega);
+    document.getElementById("formulario-pedido").addEventListener("submit", evento => {
+      evento.preventDefault();
+      pedir();
+    });
+
+    productos = cargarProductos();
+    renderizarProductos();
+    actualizarTipoEntrega();
+    actualizarCarrito();
+  </script>
+</body>
+</html>
