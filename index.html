@@ -89,6 +89,12 @@
       gap: 20px;
     }
 
+    .barra-acciones {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .marca {
       display: inline-flex;
       align-items: center;
@@ -298,6 +304,39 @@
       font-size: 13px;
     }
 
+    .estado-firestore {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: -4px 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .estado-firestore::before {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
+    }
+
+    .estado-firestore[data-estado="conectado"] {
+      color: var(--green);
+    }
+
+    .estado-firestore[data-estado="error"] {
+      color: var(--danger);
+    }
+
+    .reintentar-firestore {
+      min-height: 30px;
+      padding-inline: 10px;
+      font-size: 11px;
+    }
+
     .filtros {
       display: flex;
       gap: 9px;
@@ -447,6 +486,12 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
+    }
+
+    .producto-no-disponible {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .precio {
@@ -674,6 +719,130 @@
       gap: 13px;
     }
 
+    .admin-intro {
+      margin: 14px 0 20px;
+    }
+
+    .demo-aviso {
+      margin: 16px 0 23px;
+      padding: 15px 17px;
+      border: 1px solid #f5c84235;
+      border-radius: 15px;
+      background: #f5c8420d;
+      color: #e6d9ad;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .admin-lista {
+      display: grid;
+      gap: 12px;
+    }
+
+    .admin-producto {
+      display: grid;
+      grid-template-columns: 90px minmax(0, 1fr);
+      gap: 17px;
+      padding: 16px;
+      border: 1px solid #ffffff12;
+      border-radius: 18px;
+      background: var(--surface);
+    }
+
+    .admin-producto-imagen {
+      width: 90px;
+      height: 90px;
+      border-radius: 13px;
+      object-fit: cover;
+      background: var(--surface-raised);
+    }
+
+    .admin-producto-campos {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .admin-producto-campos .campo:first-child,
+    .admin-producto-campos .campo:nth-child(4) {
+      grid-column: 1 / -1;
+    }
+
+    .admin-producto-acciones {
+      display: flex;
+      grid-column: 1 / -1;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .disponible-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #deddd4;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .disponible-control input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--yellow);
+    }
+
+    .admin-agregar {
+      margin-top: 20px;
+    }
+
+    .admin-agregar > summary {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      padding: 0 16px;
+      border-radius: 13px;
+      background: var(--yellow);
+      color: #1b1a14;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 850;
+      list-style: none;
+    }
+
+    .admin-agregar > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .admin-agregar[open] > summary {
+      margin-bottom: 14px;
+    }
+
+    .admin-agregar-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid #ffffff12;
+      border-radius: 17px;
+      background: var(--surface);
+    }
+
+    .admin-agregar-form .campo:nth-child(3),
+    .admin-agregar-form .campo:nth-child(4),
+    .admin-agregar-form .campo:nth-child(5),
+    .admin-agregar-form > button {
+      grid-column: 1 / -1;
+    }
+
+    .admin-estado {
+      min-height: 22px;
+      margin: 14px 0 0;
+      color: var(--green);
+      font-size: 13px;
+    }
+
     .campo {
       display: grid;
       gap: 7px;
@@ -852,6 +1021,12 @@
         min-height: 65px;
       }
 
+      .barra-acciones .boton-secundario {
+        min-height: 38px;
+        padding-inline: 10px;
+        font-size: 11px;
+      }
+
       main {
         padding-top: 18px;
       }
@@ -969,6 +1144,41 @@
       .panel {
         padding: 19px;
       }
+
+      .admin-producto {
+        grid-template-columns: 62px minmax(0, 1fr);
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .admin-producto-imagen {
+        width: 62px;
+        height: 62px;
+      }
+
+      .admin-producto-campos {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-producto-campos .campo:first-child,
+      .admin-producto-campos .campo:nth-child(4) {
+        grid-column: auto;
+      }
+
+      .admin-producto-acciones {
+        flex-wrap: wrap;
+      }
+
+      .admin-agregar-form {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-agregar-form .campo:nth-child(3),
+      .admin-agregar-form .campo:nth-child(4),
+      .admin-agregar-form .campo:nth-child(5),
+      .admin-agregar-form > button {
+        grid-column: auto;
+      }
     }
 
     @media (max-width: 370px) {
@@ -1007,6 +1217,11 @@
         <span class="marca-icono" aria-hidden="true">🍔</span>
         <span>Domingo Food</span>
       </button>
+      <div class="barra-acciones">
+        <button id="nav-admin" class="boton-secundario" type="button" onclick="irA('admin')" aria-label="Abrir panel de administración de demostración">
+          Administrar
+        </button>
+      </div>
     </div>
   </header>
 
@@ -1040,13 +1255,14 @@
           </label>
         </div>
 
-        <div class="filtros" role="group" aria-label="Filtrar productos por categoría">
-          <button class="filtro" type="button" data-categoria="Todos" aria-pressed="true">Todos</button>
-          <button class="filtro" type="button" data-categoria="Tacos" aria-pressed="false">Tacos</button>
-          <button class="filtro" type="button" data-categoria="Hamburguesas" aria-pressed="false">Hamburguesas</button>
-          <button class="filtro" type="button" data-categoria="Acompañamientos" aria-pressed="false">Acompañamientos</button>
-        </div>
+        <div id="filtros-categoria" class="filtros" role="group" aria-label="Filtrar productos por categoría"></div>
 
+        <div class="estado-firestore" id="estado-firestore" role="status" aria-live="polite" data-estado="cargando">
+          Cargando menú desde Firestore; mientras tanto se muestra el menú de respaldo.
+        </div>
+        <button id="reintentar-firestore" class="boton-secundario reintentar-firestore" type="button" hidden>
+          Reintentar conexión
+        </button>
         <div id="productos" class="rejilla-productos" aria-live="polite"></div>
       </section>
     </section>
@@ -1108,6 +1324,60 @@
         </section>
       </div>
     </section>
+
+    <section id="vista-admin" class="vista" aria-labelledby="titulo-admin" hidden>
+      <div class="titulo-con-retorno">
+        <button class="boton-atras" type="button" onclick="irA('inicio')" aria-label="Volver al inicio">←</button>
+        <div>
+          <span class="eyebrow">Administración de demostración</span>
+          <h1 id="titulo-admin" class="titulo-vista" tabindex="-1">Gestionar menú</h1>
+        </div>
+      </div>
+
+      <p class="demo-aviso">
+        <strong>Modo demostración local.</strong> Los cambios se guardan solo en el almacenamiento de este navegador.
+        Este panel no tiene autenticación, no escribe en Firestore y no es seguro para uso público ni para proteger información sensible.
+      </p>
+
+      <div class="seccion-cabecera">
+        <h2>Productos</h2>
+        <button class="boton-secundario" type="button" onclick="restablecerMenu()">Restablecer menú original</button>
+      </div>
+      <div id="admin-lista" class="admin-lista"></div>
+
+      <details id="admin-agregar" class="admin-agregar">
+        <summary>＋ Añadir producto</summary>
+        <form id="formulario-nuevo-producto" class="admin-agregar-form">
+          <div class="campo">
+            <label for="nuevo-nombre">Nombre</label>
+            <input id="nuevo-nombre" name="nombre" type="text" maxlength="60" required>
+          </div>
+          <div class="campo">
+            <label for="nuevo-precio">Precio</label>
+            <input id="nuevo-precio" name="precio" type="number" min="0.01" step="0.01" required>
+          </div>
+          <div class="campo">
+            <label for="nuevo-descripcion">Descripción</label>
+            <input id="nuevo-descripcion" name="descripcion" type="text" maxlength="180" required>
+          </div>
+          <div class="campo">
+            <label for="nuevo-imagen">URL de la imagen</label>
+            <input id="nuevo-imagen" name="imagen" type="url" placeholder="https://..." required>
+          </div>
+          <div class="campo">
+            <label for="nuevo-categoria">Categoría</label>
+            <input id="nuevo-categoria" name="categoria" type="text" list="categorias-sugeridas" maxlength="40" required>
+            <datalist id="categorias-sugeridas">
+              <option value="Tacos"></option>
+              <option value="Hamburguesas"></option>
+              <option value="Acompañamientos"></option>
+            </datalist>
+          </div>
+          <button class="boton" type="submit">Añadir al menú</button>
+        </form>
+      </details>
+      <p id="admin-estado" class="admin-estado" role="status" aria-live="polite"></p>
+    </section>
   </main>
 
   <footer class="pie">
@@ -1132,32 +1402,40 @@
   <script>
     const WHATSAPP_NEGOCIO = "";
     const CLAVE_CARRITO = "domingoFoodCarrito";
-    const MENU = [
+    const CLAVE_MENU_DEMO = "domingoFoodMenuDemo";
+    const MENU_ORIGINAL = [
       {
+        id: "tacos-carne",
         nombre: "Tacos de carne",
         precio: 2.50,
         categoria: "Tacos",
         descripcion: "Carne sazonada, cilantro fresco y un toque de limón.",
         imagen: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=1000&q=85",
-        alt: "Tacos de carne servidos con cilantro y limón"
+        alt: "Tacos de carne servidos con cilantro y limón",
+        disponible: true
       },
       {
+        id: "hamburguesa",
         nombre: "Hamburguesa",
         precio: 3.50,
         categoria: "Hamburguesas",
         descripcion: "Jugosa, con queso y vegetales frescos en pan tostado.",
         imagen: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1000&q=85",
-        alt: "Hamburguesa con queso, vegetales y pan tostado"
+        alt: "Hamburguesa con queso, vegetales y pan tostado",
+        disponible: true
       },
       {
+        id: "papas-fritas",
         nombre: "Papas fritas",
         precio: 1.50,
         categoria: "Acompañamientos",
         descripcion: "Doradas y crujientes, ideales para acompañar.",
         imagen: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=1000&q=85",
-        alt: "Papas fritas doradas recién preparadas"
+        alt: "Papas fritas doradas recién preparadas",
+        disponible: true
       }
     ];
+    let MENU = MENU_ORIGINAL.map(producto => ({ ...producto }));
     let productos = [];
     let total = 0;
     let categoriaActual = "Todos";
@@ -1215,6 +1493,286 @@
       }, []);
     }
 
+    function urlImagenValida(valor) {
+      try {
+        const url = new URL(valor);
+        return url.protocol === "https:" || url.protocol === "http:";
+      } catch {
+        return false;
+      }
+    }
+
+    function productoMenuValido(producto) {
+      return producto !== null &&
+        typeof producto === "object" &&
+        !Array.isArray(producto) &&
+        typeof producto.id === "string" &&
+        producto.id.trim() !== "" &&
+        typeof producto.nombre === "string" &&
+        producto.nombre.trim() !== "" &&
+        typeof producto.precio === "number" &&
+        Number.isFinite(producto.precio) &&
+        producto.precio > 0 &&
+        typeof producto.categoria === "string" &&
+        producto.categoria.trim() !== "" &&
+        typeof producto.descripcion === "string" &&
+        producto.descripcion.trim() !== "" &&
+        typeof producto.alt === "string" &&
+        producto.alt.trim() !== "" &&
+        typeof producto.imagen === "string" &&
+        urlImagenValida(producto.imagen) &&
+        typeof producto.disponible === "boolean";
+    }
+
+    function cargarMenu() {
+      let guardados;
+      try {
+        guardados = localStorage.getItem(CLAVE_MENU_DEMO);
+      } catch (error) {
+        console.error("No se pudo leer el menú de demostración del almacenamiento local.", error);
+        return MENU_ORIGINAL.map(producto => ({ ...producto }));
+      }
+
+      if (guardados === null) {
+        return MENU_ORIGINAL.map(producto => ({ ...producto }));
+      }
+
+      let menuGuardado;
+      try {
+        menuGuardado = JSON.parse(guardados);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          console.error("El menú de demostración guardado no contiene JSON válido.", error);
+          return MENU_ORIGINAL.map(producto => ({ ...producto }));
+        }
+        throw error;
+      }
+
+      if (
+        !Array.isArray(menuGuardado) ||
+        !menuGuardado.every(productoMenuValido) ||
+        new Set(menuGuardado.map(producto => producto.id)).size !== menuGuardado.length
+      ) {
+        console.error("El menú de demostración guardado tiene un formato inválido.");
+        return MENU_ORIGINAL.map(producto => ({ ...producto }));
+      }
+
+      return menuGuardado;
+    }
+
+    function guardarMenu() {
+      try {
+        localStorage.setItem(CLAVE_MENU_DEMO, JSON.stringify(MENU));
+      } catch (error) {
+        console.error("No se pudo guardar el menú de demostración.", error);
+        mostrarEstadoAdmin("No se pudieron guardar los cambios en este navegador.", true);
+        return false;
+      }
+      return true;
+    }
+
+    function mostrarEstadoAdmin(mensaje, esError = false) {
+      const estado = document.getElementById("admin-estado");
+      estado.textContent = mensaje;
+      estado.style.color = esError ? "var(--danger)" : "var(--green)";
+    }
+
+    function crearCampoAdmin(etiqueta, nombre, valor, tipo = "text") {
+      const campo = document.createElement("div");
+      campo.className = "campo";
+      const id = "admin-" + nombre + "-" + Math.random().toString(36).slice(2, 9);
+      const label = document.createElement("label");
+      label.htmlFor = id;
+      label.textContent = etiqueta;
+      const input = document.createElement("input");
+      input.id = id;
+      input.name = nombre;
+      input.type = tipo;
+      input.value = String(valor);
+      input.required = true;
+      if (nombre === "nombre") {
+        input.maxLength = 60;
+      } else if (nombre === "descripcion") {
+        input.maxLength = 180;
+      } else if (nombre === "categoria") {
+        input.maxLength = 40;
+      } else if (nombre === "precio") {
+        input.min = "0.01";
+        input.step = "0.01";
+      } else if (nombre === "imagen") {
+        input.placeholder = "https://...";
+      }
+      campo.append(label, input);
+      return campo;
+    }
+
+    function renderizarAdmin() {
+      const lista = document.getElementById("admin-lista");
+      lista.replaceChildren();
+
+      MENU.forEach(producto => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "admin-producto";
+
+        const imagen = document.createElement("img");
+        imagen.className = "admin-producto-imagen";
+        imagen.src = producto.imagen;
+        imagen.alt = "Vista previa: " + producto.nombre;
+        imagen.loading = "lazy";
+
+        const formulario = document.createElement("form");
+        formulario.className = "admin-producto-campos";
+        formulario.dataset.productoId = producto.id;
+        formulario.append(
+          crearCampoAdmin("Nombre", "nombre", producto.nombre),
+          crearCampoAdmin("Precio", "precio", producto.precio.toFixed(2), "number"),
+          crearCampoAdmin("Descripción", "descripcion", producto.descripcion),
+          crearCampoAdmin("URL de la imagen", "imagen", producto.imagen, "url")
+        );
+
+        formulario.appendChild(
+          crearCampoAdmin("Categoría", "categoria", producto.categoria)
+        );
+
+        const acciones = document.createElement("div");
+        acciones.className = "admin-producto-acciones";
+        const disponibleLabel = document.createElement("label");
+        disponibleLabel.className = "disponible-control";
+        const disponible = document.createElement("input");
+        disponible.type = "checkbox";
+        disponible.name = "disponible";
+        disponible.checked = producto.disponible;
+        disponibleLabel.append(disponible, document.createTextNode("Disponible para pedidos"));
+
+        const botones = document.createElement("div");
+        botones.className = "acciones-carrito";
+        const guardar = document.createElement("button");
+        guardar.className = "boton";
+        guardar.type = "submit";
+        guardar.textContent = "Guardar cambios";
+        const eliminar = document.createElement("button");
+        eliminar.className = "boton-secundario";
+        eliminar.type = "button";
+        eliminar.textContent = "Eliminar";
+        eliminar.setAttribute("aria-label", "Eliminar " + producto.nombre + " del menú de demostración");
+        eliminar.addEventListener("click", () => eliminarProducto(producto.id));
+        botones.append(guardar, eliminar);
+        acciones.append(disponibleLabel, botones);
+        formulario.appendChild(acciones);
+
+        formulario.addEventListener("submit", evento => {
+          evento.preventDefault();
+          guardarCambiosProducto(formulario);
+        });
+        tarjeta.append(imagen, formulario);
+        lista.appendChild(tarjeta);
+      });
+    }
+
+    function guardarCambiosProducto(formulario) {
+      const id = formulario.dataset.productoId;
+      const producto = MENU.find(item => item.id === id);
+      if (!producto) {
+        mostrarEstadoAdmin("No se encontró el producto para actualizar.", true);
+        return;
+      }
+
+      const datos = new FormData(formulario);
+      const actualizado = {
+        ...producto,
+        nombre: String(datos.get("nombre")).trim(),
+        precio: Number(datos.get("precio")),
+        descripcion: String(datos.get("descripcion")).trim(),
+        imagen: String(datos.get("imagen")).trim(),
+        alt: String(datos.get("nombre")).trim(),
+        categoria: String(datos.get("categoria")),
+        disponible: datos.has("disponible")
+      };
+      if (!productoMenuValido(actualizado)) {
+        mostrarEstadoAdmin("Revisa los datos: precio mayor que cero, campos completos e imagen HTTP/HTTPS válida.", true);
+        return;
+      }
+
+      MENU = MENU.map(item => item.id === id ? actualizado : item);
+      if (!guardarMenu()) {
+        MENU = MENU.map(item => item.id === id ? producto : item);
+        return;
+      }
+      renderizarAdmin();
+      renderizarProductos();
+      if (productoSeleccionado && productoSeleccionado.id === id) {
+        productoSeleccionado = actualizado;
+      }
+      mostrarEstadoAdmin("Cambios guardados en este navegador.");
+    }
+
+    function agregarProductoAdmin(evento) {
+      evento.preventDefault();
+      const formulario = evento.currentTarget;
+      const datos = new FormData(formulario);
+      const nombre = String(datos.get("nombre")).trim();
+      const producto = {
+        id: "demo-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7),
+        nombre,
+        precio: Number(datos.get("precio")),
+        categoria: String(datos.get("categoria")),
+        descripcion: String(datos.get("descripcion")).trim(),
+        imagen: String(datos.get("imagen")).trim(),
+        alt: nombre,
+        disponible: true
+      };
+      if (!productoMenuValido(producto)) {
+        mostrarEstadoAdmin("Revisa los datos: precio mayor que cero, campos completos e imagen HTTP/HTTPS válida.", true);
+        return;
+      }
+      if (MENU.some(item => item.nombre.toLocaleLowerCase("es") === nombre.toLocaleLowerCase("es"))) {
+        mostrarEstadoAdmin("Ya existe un producto con ese nombre.", true);
+        return;
+      }
+
+      MENU = [...MENU, producto];
+      if (!guardarMenu()) {
+        MENU = MENU.filter(item => item.id !== producto.id);
+        return;
+      }
+      formulario.reset();
+      document.getElementById("admin-agregar").open = false;
+      renderizarAdmin();
+      renderizarProductos();
+      mostrarEstadoAdmin("Producto añadido al menú de demostración.");
+    }
+
+    function eliminarProducto(id) {
+      const producto = MENU.find(item => item.id === id);
+      if (!producto || !window.confirm("¿Eliminar " + producto.nombre + " del menú de demostración?")) {
+        return;
+      }
+      const anterior = MENU;
+      MENU = MENU.filter(item => item.id !== id);
+      if (!guardarMenu()) {
+        MENU = anterior;
+        return;
+      }
+      renderizarAdmin();
+      renderizarProductos();
+      mostrarEstadoAdmin("Producto eliminado del menú de demostración.");
+    }
+
+    function restablecerMenu() {
+      if (!window.confirm("¿Restablecer los productos y precios originales? Se descartarán los cambios locales del menú.")) {
+        return;
+      }
+      const anterior = MENU;
+      MENU = MENU_ORIGINAL.map(producto => ({ ...producto }));
+      if (!guardarMenu()) {
+        MENU = anterior;
+        return;
+      }
+      renderizarAdmin();
+      renderizarProductos();
+      mostrarEstadoAdmin("Menú restablecido a sus valores originales.");
+    }
+
     function guardarProductos() {
       try {
         localStorage.setItem(CLAVE_CARRITO, JSON.stringify(productos));
@@ -1224,6 +1782,12 @@
     }
 
     function agregar(nombre, precio) {
+      const productoMenu = MENU.find(producto =>
+        producto.nombre === nombre && producto.precio === precio
+      );
+      if (!productoMenu || !productoMenu.disponible) {
+        return;
+      }
       const existente = productos.find(producto =>
         producto.nombre === nombre && producto.precio === precio
       );
@@ -1326,6 +1890,7 @@
     }
 
     function renderizarProductos() {
+      renderizarFiltros();
       const consulta = document.getElementById("buscador").value.trim().toLocaleLowerCase("es");
       const coincidencias = MENU.filter(producto => {
         const coincideCategoria =
@@ -1380,16 +1945,44 @@
         const precio = document.createElement("span");
         precio.className = "precio";
         precio.textContent = "$" + producto.precio.toFixed(2);
-        const agregarRapido = document.createElement("button");
-        agregarRapido.className = "agregar-rapido";
-        agregarRapido.type = "button";
-        agregarRapido.textContent = "+";
-        agregarRapido.setAttribute("aria-label", "Agregar " + producto.nombre + " al carrito");
-        agregarRapido.onclick = () => agregar(producto.nombre, producto.precio);
-        pie.append(precio, agregarRapido);
+        if (producto.disponible) {
+          const agregarRapido = document.createElement("button");
+          agregarRapido.className = "agregar-rapido";
+          agregarRapido.type = "button";
+          agregarRapido.textContent = "+";
+          agregarRapido.setAttribute("aria-label", "Agregar " + producto.nombre + " al carrito");
+          agregarRapido.onclick = () => agregar(producto.nombre, producto.precio);
+          pie.append(precio, agregarRapido);
+        } else {
+          const noDisponible = document.createElement("span");
+          noDisponible.className = "producto-no-disponible";
+          noDisponible.textContent = "No disponible";
+          pie.append(precio, noDisponible);
+        }
 
         tarjeta.append(imagen, abrir, pie);
         contenedor.appendChild(tarjeta);
+      });
+    }
+
+    function renderizarFiltros() {
+      const categorias = [...new Set(MENU.map(producto => producto.categoria))]
+        .filter(categoria => typeof categoria === "string" && categoria.trim() !== "")
+        .sort((a, b) => a.localeCompare(b, "es"));
+      if (categoriaActual !== "Todos" && !categorias.includes(categoriaActual)) {
+        categoriaActual = "Todos";
+      }
+
+      const contenedor = document.getElementById("filtros-categoria");
+      contenedor.replaceChildren();
+      ["Todos", ...categorias].forEach(categoria => {
+        const boton = document.createElement("button");
+        boton.className = "filtro";
+        boton.type = "button";
+        boton.dataset.categoria = categoria;
+        boton.setAttribute("aria-pressed", String(categoria === categoriaActual));
+        boton.textContent = categoria;
+        contenedor.appendChild(boton);
       });
     }
 
@@ -1425,7 +2018,10 @@
       const boton = document.createElement("button");
       boton.className = "boton";
       boton.type = "button";
-      boton.textContent = "Agregar al carrito";
+      boton.textContent = productoSeleccionado.disponible
+        ? "Agregar al carrito"
+        : "No disponible";
+      boton.disabled = !productoSeleccionado.disponible;
       boton.onclick = () => {
         agregar(productoSeleccionado.nombre, productoSeleccionado.precio);
         irA("carrito");
@@ -1436,7 +2032,7 @@
     }
 
     async function irA(vista) {
-      const vistas = ["inicio", "detalle", "carrito"];
+      const vistas = ["inicio", "detalle", "carrito", "admin"];
       if (!vistas.includes(vista) || vista === vistaActual) {
         return;
       }
@@ -1466,10 +2062,13 @@
       });
 
       vistaActual = vista;
-      document.getElementById("nav-interior").dataset.active =
-        vista === "carrito" ? "carrito" : "inicio";
+      if (vista !== "admin" && vista !== "detalle") {
+        document.getElementById("nav-interior").dataset.active =
+          vista === "carrito" ? "carrito" : "inicio";
+      }
       const navInicio = document.getElementById("nav-inicio");
       const navCarrito = document.getElementById("nav-carrito");
+      const navAdmin = document.getElementById("nav-admin");
       if (vista === "inicio") {
         navInicio.setAttribute("aria-current", "page");
       } else {
@@ -1480,9 +2079,15 @@
       } else {
         navCarrito.removeAttribute("aria-current");
       }
+      if (vista === "admin") {
+        navAdmin.setAttribute("aria-current", "page");
+      } else {
+        navAdmin.removeAttribute("aria-current");
+      }
       const encabezado = document.getElementById(
         vista === "detalle" ? "detalle-nombre" :
-          vista === "carrito" ? "titulo-carrito" : "titulo-inicio"
+          vista === "carrito" ? "titulo-carrito" :
+            vista === "admin" ? "titulo-admin" : "titulo-inicio"
       );
       encabezado.focus({ preventScroll: true });
 
@@ -1558,25 +2163,142 @@
     }
 
     document.getElementById("buscador").addEventListener("input", renderizarProductos);
-    document.querySelectorAll(".filtro").forEach(boton => {
-      boton.addEventListener("click", () => {
-        categoriaActual = boton.dataset.categoria;
-        document.querySelectorAll(".filtro").forEach(filtro => {
-          filtro.setAttribute("aria-pressed", String(filtro === boton));
-        });
-        renderizarProductos();
-      });
+    document.getElementById("filtros-categoria").addEventListener("click", evento => {
+      const boton = evento.target.closest("button[data-categoria]");
+      if (!boton) {
+        return;
+      }
+      categoriaActual = boton.dataset.categoria;
+      renderizarProductos();
     });
     document.getElementById("tipo-entrega").addEventListener("change", actualizarTipoEntrega);
     document.getElementById("formulario-pedido").addEventListener("submit", evento => {
       evento.preventDefault();
       pedir();
     });
+    document.getElementById("formulario-nuevo-producto").addEventListener("submit", agregarProductoAdmin);
 
+    window.aplicarMenuFirestore = function(menuFirestore) {
+      MENU = menuFirestore;
+      renderizarProductos();
+      renderizarAdmin();
+    };
+
+    MENU = cargarMenu();
     productos = cargarProductos();
     renderizarProductos();
+    renderizarAdmin();
     actualizarTipoEntrega();
     actualizarCarrito();
+  </script>
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSzacYjQ3OFefQKTNeLXae236Qlc0Vxdk",
+      authDomain: "domingo-food.firebaseapp.com",
+      projectId: "domingo-food",
+      storageBucket: "domingo-food.firebasestorage.app",
+      messagingSenderId: "516645004323",
+      appId: "1:516645004323:web:b7a164ee1d6b499fb8fd96"
+    };
+    const NOMBRE_COLECCION = "productos";
+    const estado = document.getElementById("estado-firestore");
+    const reintentar = document.getElementById("reintentar-firestore");
+    let firestoreDb;
+
+    function mostrarEstado(mensaje, tipo) {
+      estado.textContent = mensaje;
+      estado.dataset.estado = tipo;
+    }
+
+    async function cargarDesdeFirestore() {
+      reintentar.hidden = true;
+      reintentar.disabled = true;
+      mostrarEstado("Cargando menú desde Firestore; mientras tanto se muestra el menú de respaldo.", "cargando");
+
+      try {
+        const [{ initializeApp }, { getFirestore, collection, getDocs }] = await Promise.all([
+          import("https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js"),
+          import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js")
+        ]);
+
+        if (!firestoreDb) {
+          const app = initializeApp(firebaseConfig);
+          firestoreDb = getFirestore(app);
+        }
+
+        const resultado = await getDocs(collection(firestoreDb, NOMBRE_COLECCION));
+        if (resultado.empty) {
+          mostrarEstado(
+            "La colección productos está vacía. Se conserva el menú local de respaldo; añade documentos para publicar el menú.",
+            "error"
+          );
+          reintentar.hidden = false;
+          return;
+        }
+
+        const activos = resultado.docs
+          .map(documento => ({ id: documento.id, ...documento.data() }))
+          .filter(producto => producto.activo === true);
+        const validos = activos.filter(producto =>
+          typeof producto.nombre === "string" &&
+          producto.nombre.trim() !== "" &&
+          typeof producto.precio === "number" &&
+          Number.isFinite(producto.precio) &&
+          producto.precio > 0 &&
+          typeof producto.categoria === "string" &&
+          producto.categoria.trim() !== "" &&
+          typeof producto.descripcion === "string" &&
+          producto.descripcion.trim() !== "" &&
+          typeof producto.imagen === "string" &&
+          /^https?:\/\//i.test(producto.imagen) &&
+          typeof producto.orden === "number" &&
+          Number.isFinite(producto.orden)
+        ).map(producto => ({
+          id: producto.id,
+          nombre: producto.nombre.trim(),
+          precio: producto.precio,
+          categoria: producto.categoria.trim(),
+          descripcion: producto.descripcion.trim(),
+          imagen: producto.imagen.trim(),
+          alt: producto.nombre.trim(),
+          disponible: true,
+          orden: producto.orden
+        })).sort((a, b) => a.orden - b.orden || a.nombre.localeCompare(b.nombre, "es"));
+
+        if (activos.length > 0 && validos.length === 0) {
+          throw new Error("Los documentos activos no coinciden con el esquema esperado.");
+        }
+
+        window.aplicarMenuFirestore(validos);
+        if (activos.length === 0) {
+          mostrarEstado("Firestore está conectado, pero no hay productos marcados como activos.", "conectado");
+        } else if (validos.length < activos.length) {
+          mostrarEstado(
+            "Menú cargado desde Firestore. Se omitieron " +
+              (activos.length - validos.length) +
+              " documentos activos con campos inválidos.",
+            "error"
+          );
+        } else {
+          mostrarEstado("Menú actualizado desde Firestore.", "conectado");
+        }
+      } catch (error) {
+        console.error("No se pudo cargar el menú de Firestore; se mantiene el menú de respaldo.", error);
+        const codigo = typeof error.code === "string" ? error.code : "";
+        const detalle = codigo === "permission-denied"
+          ? " Comprueba que las reglas permitan leer productos y denieguen escrituras públicas."
+          : codigo
+            ? " Código: " + codigo + "."
+            : " Revisa la configuración Firebase y el esquema de la colección.";
+        mostrarEstado("No se pudo cargar Firestore. Se muestra el menú local de respaldo." + detalle, "error");
+        reintentar.hidden = false;
+      } finally {
+        reintentar.disabled = false;
+      }
+    }
+
+    reintentar.addEventListener("click", cargarDesdeFirestore);
+    cargarDesdeFirestore();
   </script>
 </body>
 </html>
