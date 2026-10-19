@@ -2179,7 +2179,10 @@
     document.getElementById("formulario-nuevo-producto").addEventListener("submit", agregarProductoAdmin);
 
     window.aplicarMenuFirestore = function(menuFirestore) {
-      MENU = menuFirestore;
+      MENU = menuFirestore.map(producto => ({
+        ...producto,
+        imagen: producto.imagen.trim() || MENU_ORIGINAL[0].imagen
+      }));
       renderizarProductos();
       renderizarAdmin();
     };
@@ -2250,7 +2253,7 @@
           typeof producto.descripcion === "string" &&
           producto.descripcion.trim() !== "" &&
           typeof producto.imagen === "string" &&
-          /^https?:\/\//i.test(producto.imagen) &&
+          (producto.imagen.trim() === "" || /^https?:\/\//i.test(producto.imagen.trim())) &&
           typeof producto.orden === "number" &&
           Number.isFinite(producto.orden)
         ).map(producto => ({
