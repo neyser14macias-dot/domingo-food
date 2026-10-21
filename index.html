@@ -2045,6 +2045,28 @@
       border-bottom: none;
     }
 
+    .admin-pedido-verificacion {
+      padding: 7px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .verificacion-ok {
+      background: #4ade8015;
+      color: #4ade80;
+      border: 1px solid #4ade8035;
+    }
+
+    .verificacion-alerta {
+      background: #e76f5118;
+      color: #ff8b7b;
+      border: 1px solid #e76f5145;
+    }
+
     /* Pie del pedido: total y selector de estado */
     .admin-pedido-pie {
       display: flex;
@@ -3824,10 +3846,11 @@
       guardandoPedido = true;
       if (botonWhatsapp) {
         botonWhatsapp.disabled = true;
-        botonWhatsapp.innerHTML = '<span>Guardando pedido en el sistema...</span>';
+        botonWhatsapp.innerHTML = '<span>Registrando pedido en el sistema...</span>';
       }
 
-      const snapshotProductos = productos.map(producto => ({
+      // Preparar lista de productos
+      const productosPedido = productos.map(producto => ({
         nombre: producto.nombre,
         precio: Number(producto.precio),
         cantidad: Number(producto.cantidad),
@@ -3837,11 +3860,11 @@
 
       const datosPedido = {
         cliente: nombre,
-        telefono: telefono,
+        telefono: digitosTelefono,
         tipoEntrega: tipoEntrega,
         direccion: tipoEntrega === "domicilio" ? direccion : "",
         observaciones: observaciones,
-        productos: snapshotProductos,
+        productos: productosPedido,
         total: totalPedido,
         estado: "Pendiente", // Estado inicial: pendiente de confirmación por el negocio
         fecha: new Date().toISOString()
@@ -3849,10 +3872,10 @@
 
       let pedidoId = "";
       try {
-        if (!window.guardarPedidoFirestore) {
-          throw new Error("El servicio de base de datos Firestore no está disponible.");
+        if (!window.guardarPedidoFirestoreDirecto) {
+          throw new Error("El servicio de base de datos no está disponible.");
         }
-        pedidoId = await window.guardarPedidoFirestore(datosPedido);
+        pedidoId = await window.guardarPedidoFirestoreDirecto(datosPedido);
       } catch (error) {
         console.error("Error al registrar pedido en Firestore:", error);
         guardandoPedido = false;
@@ -3860,17 +3883,25 @@
           botonWhatsapp.disabled = false;
           botonWhatsapp.innerHTML = 'Enviar pedido por WhatsApp <span aria-hidden="true">↗</span>';
         }
-        const errorMsg = "No se pudo registrar tu pedido en el sistema: " + (error.message || error) + ".\n\nEl pedido NO se envió por WhatsApp para evitar inconsistencias. Por favor, comprueba tu conexión e inténtalo de nuevo.";
+
+        let mensajeError = "No se pudo registrar tu pedido en el sistema.";
+        if (error.code === "permission-denied") {
+          mensajeError = "No se pudo guardar el pedido por permisos de Firestore. Asegúrate de publicar las reglas de seguridad en Firebase Console.";
+        } else if (error.message) {
+          mensajeError = "Error: " + error.message;
+        }
+
         if (errorBox) {
-          errorBox.textContent = errorMsg;
+          errorBox.innerHTML = "<strong>Error al procesar pedido:</strong><br>" + escapeHtml(mensajeError);
           errorBox.hidden = false;
         }
-        alert(errorMsg);
+        alert(mensajeError + "\n\nEl pedido NO se envió por WhatsApp para evitar inconsistencias.");
         return; // DETENER: no abrir WhatsApp si falla el guardado
       }
 
-      // Guardado exitoso: Generar mensaje de WhatsApp con referencia
-      const refPedido = pedidoId ? pedidoId.slice(0, 8).toUpperCase() : "";
+      // Pedido validado y guardado en Firestore
+      const refPedido = pedidoId ? pedidoId.slice(0, 8).toUpperCase() : "REGISTRADO";
+
       const lineas = [
         "👋 ¡Hola! Quiero realizar el siguiente pedido en *Domingo Food*:",
         ""
@@ -3900,9 +3931,10 @@
         "🛒 *DETALLE DEL PEDIDO*"
       );
 
-      snapshotProductos.forEach(producto => {
+      productos.forEach(producto => {
+        const subtotal = producto.precio * producto.cantidad;
         lineas.push(
-          "• " + producto.cantidad + "x " + producto.nombre + " — $" + producto.precio.toFixed(2) + " c/u ($" + producto.subtotal.toFixed(2) + ")"
+          "• " + producto.cantidad + "x " + producto.nombre + " — $" + producto.precio.toFixed(2) + " c/u ($" + subtotal.toFixed(2) + ")"
         );
       });
 
@@ -3925,11 +3957,11 @@
         "noopener,noreferrer"
       );
 
-      // Vaciar carrito tras guardado exitoso para prevenir duplicados
+      // Vaciar carrito tras registro exitoso
       vaciarCarrito();
 
       if (feedbackBox) {
-        feedbackBox.innerHTML = "<strong>✓ ¡Pedido registrado con éxito!</strong><br>Código de referencia: <code>#" + (refPedido || "PENDIENTE") + "</code>.<br>Estado: <strong>Pendiente de aceptación por el negocio</strong>.<br>Se abrió WhatsApp con el resumen de tu compra.";
+        feedbackBox.innerHTML = "<strong>✓ ¡Pedido registrado con éxito!</strong><br>Código de referencia: <code>#" + refPedido + "</code>.<br>Total: <strong>$" + totalPedido.toFixed(2) + "</strong>.<br>Estado actual: <strong>Pendiente de confirmación por el negocio</strong>.<br>Se abrió WhatsApp con el resumen de tu compra.";
         feedbackBox.hidden = false;
       }
 
@@ -4021,7 +4053,13 @@
       }
     }
 
-    // Inicialización de Firebase (App, Firestore y Auth)
+    let appCheckInstance = null;
+
+    // Clave de sitio opcional para Firebase App Check con reCAPTCHA v3
+    // Configurable en Firebase Console > App Check si se desea verificar el origen web
+    const RECAPTCHA_SITE_KEY = "";
+
+    // Inicialización de Firebase (App, Firestore y Auth - Plan Spark sin costo)
     async function obtenerFirebase() {
       if (firestoreDb && authInstance) {
         return { firestoreDb, auth: authInstance };
@@ -4040,12 +4078,40 @@
       const app = initializeApp(firebaseConfig);
       firestoreDb = getFirestore(app);
       authInstance = getAuth(app);
+
+      // Activar Firebase App Check si se dispone de la clave de reCAPTCHA v3
+      if (RECAPTCHA_SITE_KEY && !appCheckInstance) {
+        try {
+          const { initializeAppCheck, ReCaptchaV3Provider } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-app-check.js");
+          appCheckInstance = initializeAppCheck(app, {
+            provider: new ReCaptchaV3Provider(RECAPTCHA_SITE_KEY),
+            isTokenAutoRefreshEnabled: true
+          });
+          console.log("Firebase App Check inicializado con reCAPTCHA v3.");
+        } catch (appCheckErr) {
+          console.warn("App Check no se pudo inicializar:", appCheckErr);
+        }
+      }
+
+      // Autenticación anónima para clientes si el proveedor está habilitado en Firebase Console
+      if (!authInstance.currentUser) {
+        try {
+          const { signInAnonymously } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js");
+          await signInAnonymously(authInstance);
+        } catch (anonErr) {
+          // Si el proveedor Anónimo no está habilitado en Firebase Console, se ignora limpiamente
+          if (anonErr.code !== "auth/operation-not-allowed") {
+            console.warn("Autenticación anónima no disponible:", anonErr);
+          }
+        }
+      }
+
       return { firestoreDb, auth: authInstance };
     }
 
     // Verificación de si el usuario autenticado tiene permisos de administrador en Firestore
     async function verificarPermisoAdmin(user) {
-      if (!user || !user.uid) return false;
+      if (!user || !user.uid || user.isAnonymous) return false;
       try {
         const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
         if (!firestoreDb) await obtenerFirebase();
@@ -4076,17 +4142,39 @@
     let pedidosLista = [];
     let filtroEstadoActual = "Todos";
 
-    // Registrar pedido en la colección 'pedidos' de Firestore
-    window.guardarPedidoFirestore = async function(datos) {
+    // Guardado directo de pedidos en Firestore (Plan Spark - 100% gratuito)
+    window.guardarPedidoFirestoreDirecto = async function(datosPedido) {
       const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
       if (!firestoreDb) await obtenerFirebase();
 
+      // Asegurar sesión anónima si no hay sesión y el proveedor está activo
+      if (authInstance && !authInstance.currentUser) {
+        try {
+          const { signInAnonymously } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js");
+          await signInAnonymously(authInstance);
+        } catch (anonErr) {
+          // Continuar aunque no esté activo el proveedor anónimo
+        }
+      }
+
       const docRef = await addDoc(collection(firestoreDb, NOMBRE_COLECCION_PEDIDOS), {
-        ...datos,
+        cliente: datosPedido.cliente,
+        telefono: datosPedido.telefono,
+        tipoEntrega: datosPedido.tipoEntrega,
+        direccion: datosPedido.direccion || "",
+        observaciones: datosPedido.observaciones || "",
+        productos: datosPedido.productos,
+        total: datosPedido.total,
+        estado: "Pendiente",
+        fecha: datosPedido.fecha || new Date().toISOString(),
         creadoEn: serverTimestamp()
       });
+
       return docRef.id;
     };
+
+    // Alias retrocompatible
+    window.guardarPedidoFirestore = window.guardarPedidoFirestoreDirecto;
 
     // Actualizar estado de un pedido (Solo administradores autenticados)
     window.actualizarEstadoPedidoFirestore = async function(pedidoId, nuevoEstado) {
@@ -4297,7 +4385,47 @@
         });
         itemsBloque.innerHTML = htmlItems;
 
-        cuerpo.append(clienteBloque, itemsBloque);
+        // Verificación contra el catálogo oficial (MENU sincronizado con Firestore)
+        let totalCalculadoCatalogo = 0;
+        let hayDiscrepancia = false;
+        const discrepancias = [];
+
+        (pedido.productos || []).forEach(prod => {
+          const cant = Number(prod.cantidad) || 0;
+          const precioPedido = Number(prod.precio) || 0;
+          const itemMenu = (MENU || []).find(m =>
+            (prod.id && m.id === prod.id) ||
+            m.nombre.trim().toLowerCase() === (prod.nombre || "").trim().toLowerCase()
+          );
+
+          if (!itemMenu) {
+            hayDiscrepancia = true;
+            discrepancias.push(`"${prod.nombre}" no está en el menú`);
+          } else {
+            const precioOficial = Number(itemMenu.precio);
+            totalCalculadoCatalogo += precioOficial * cant;
+            if (Math.abs(precioOficial - precioPedido) > 0.01) {
+              hayDiscrepancia = true;
+              discrepancias.push(`"${prod.nombre}": pedido a $${precioPedido.toFixed(2)} (catálogo: $${precioOficial.toFixed(2)})`);
+            }
+          }
+        });
+
+        const totalPedido = Number(pedido.total || 0);
+        if (Math.abs(totalCalculadoCatalogo - totalPedido) > 0.05 && discrepancias.length === 0) {
+          hayDiscrepancia = true;
+          discrepancias.push(`Total registrado ($${totalPedido.toFixed(2)}) difiere del cálculo ($${totalCalculadoCatalogo.toFixed(2)})`);
+        }
+
+        const verificacionDiv = document.createElement("div");
+        verificacionDiv.className = "admin-pedido-verificacion " + (hayDiscrepancia ? "verificacion-alerta" : "verificacion-ok");
+        if (hayDiscrepancia) {
+          verificacionDiv.innerHTML = `⚠️ <span><strong>Alerta de catálogo:</strong> ${escapeHtml(discrepancias.join(" · "))}</span>`;
+        } else {
+          verificacionDiv.innerHTML = `✓ <span><strong>Catálogo verificado:</strong> Precios y total correctos ($${totalCalculadoCatalogo.toFixed(2)})</span>`;
+        }
+
+        cuerpo.append(clienteBloque, itemsBloque, verificacionDiv);
 
         const pie = document.createElement("div");
         pie.className = "admin-pedido-pie";
@@ -4357,9 +4485,57 @@
     };
 
     window.manejarCambioEstadoPedido = async function(pedidoId, nuevoEstado, selectElem) {
+      const pedido = pedidosLista.find(p => p.id === pedidoId);
+
+      // Verificación de seguridad antes de aceptar o cambiar de estado un pedido
+      if (pedido && nuevoEstado !== "Pendiente") {
+        let totalCalculado = 0;
+        let tieneDiscrepancia = false;
+        const fallas = [];
+
+        (pedido.productos || []).forEach(prod => {
+          const cant = Number(prod.cantidad) || 0;
+          const precioPedido = Number(prod.precio) || 0;
+          const itemMenu = (MENU || []).find(m =>
+            (prod.id && m.id === prod.id) ||
+            m.nombre.trim().toLowerCase() === (prod.nombre || "").trim().toLowerCase()
+          );
+
+          if (!itemMenu) {
+            tieneDiscrepancia = true;
+            fallas.push(`"${prod.nombre}" no existe en el catálogo actual.`);
+          } else {
+            const precioOficial = Number(itemMenu.precio);
+            totalCalculado += precioOficial * cant;
+            if (Math.abs(precioOficial - precioPedido) > 0.01) {
+              tieneDiscrepancia = true;
+              fallas.push(`"${prod.nombre}" registrado a $${precioPedido.toFixed(2)} (precio oficial: $${precioOficial.toFixed(2)}).`);
+            }
+          }
+        });
+
+        const totalPedido = Number(pedido.total || 0);
+        if (Math.abs(totalCalculado - totalPedido) > 0.05 && fallas.length === 0) {
+          tieneDiscrepancia = true;
+          fallas.push(`Total registrado ($${totalPedido.toFixed(2)}) difiere del cálculo ($${totalCalculado.toFixed(2)}).`);
+        }
+
+        if (tieneDiscrepancia) {
+          const advertencia = `⚠️ ADVERTENCIA DE SEGURIDAD (DISCREPANCIA EN EL CATÁLOGO):\n\n` +
+            `Este pedido presenta diferencias con los precios oficiales:\n` +
+            fallas.map(f => "• " + f).join("\n") + "\n\n" +
+            `Total en el pedido: $${totalPedido.toFixed(2)}\n` +
+            `Total según catálogo oficial: $${totalCalculado.toFixed(2)}\n\n` +
+            `¿Estás seguro de cambiar el estado a "${nuevoEstado}" a pesar de las inconsistencias?`;
+          if (!confirm(advertencia)) {
+            if (selectElem && pedido) selectElem.value = pedido.estado;
+            return;
+          }
+        }
+      }
+
       if (!confirm(`¿Deseas cambiar el estado del pedido a "${nuevoEstado}"?`)) {
         if (selectElem) {
-          const pedido = pedidosLista.find(p => p.id === pedidoId);
           if (pedido) selectElem.value = pedido.estado;
         }
         return;
@@ -4535,7 +4711,7 @@
         await obtenerFirebase();
 
         onAuthStateChanged(authInstance, async user => {
-          if (user) {
+          if (user && !user.isAnonymous) {
             const autorizado = await verificarPermisoAdmin(user);
             if (autorizado) {
               window.usuarioAdminActual = {
@@ -4545,6 +4721,7 @@
               };
               actualizarAdminUI(user);
               iniciarEscuchaPedidos();
+              return;
             } else {
               detenerEscuchaPedidos();
               await signOut(authInstance);
@@ -4553,14 +4730,16 @@
               if (vistaActual === "admin") {
                 irA("inicio");
               }
+              return;
             }
-          } else {
-            detenerEscuchaPedidos();
-            window.usuarioAdminActual = null;
-            actualizarAdminUI(null);
-            if (vistaActual === "admin") {
-              irA("inicio");
-            }
+          }
+
+          // Si no hay usuario o la sesión es anónima (cliente regular):
+          detenerEscuchaPedidos();
+          window.usuarioAdminActual = null;
+          actualizarAdminUI(null);
+          if (vistaActual === "admin") {
+            irA("inicio");
           }
         });
       } catch (err) {
