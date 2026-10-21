@@ -58,6 +58,7 @@
     button:focus-visible,
     input:focus-visible,
     select:focus-visible,
+    textarea:focus-visible,
     a:focus-visible {
       outline: 3px solid var(--yellow);
       outline-offset: 3px;
@@ -331,6 +332,14 @@
       color: var(--danger);
     }
 
+    .estado-firestore[data-estado="cargando"]::before {
+      animation: estado-pulso 1.2s ease-in-out infinite;
+    }
+
+    @keyframes estado-pulso {
+      50% { opacity: 0.35; }
+    }
+
     .reintentar-firestore {
       min-height: 30px;
       padding-inline: 10px;
@@ -382,7 +391,8 @@
 
     .buscador input,
     .campo input,
-    .campo select {
+    .campo select,
+    .campo textarea {
       width: 100%;
       min-height: 46px;
       padding: 0 13px;
@@ -392,11 +402,21 @@
       color: var(--text);
     }
 
+    .campo textarea {
+      min-height: 72px;
+      padding: 10px 13px;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
     .buscador input {
       padding-left: 42px;
     }
 
-    input::placeholder {
+    input::placeholder,
+    textarea::placeholder {
       color: #828177;
     }
 
@@ -412,6 +432,73 @@
       border-radius: var(--radius);
       background: var(--surface);
       transition: transform 220ms var(--spring), border-color 180ms ease;
+    }
+
+    .tarjeta-skeleton {
+      pointer-events: none;
+    }
+
+    .skeleton-bloque {
+      background: linear-gradient(100deg, var(--surface-raised) 25%, #34352f 42%, var(--surface-raised) 62%);
+      background-size: 200% 100%;
+      animation: skeleton-brillo 1.5s ease-in-out infinite;
+    }
+
+    @keyframes skeleton-brillo {
+      to { background-position-x: -200%; }
+    }
+
+    .skeleton-imagen {
+      height: 206px;
+    }
+
+    .skeleton-contenido {
+      padding: 16px 17px 15px;
+    }
+
+    .skeleton-linea {
+      height: 12px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+
+    .skeleton-linea-categoria {
+      width: 34%;
+      height: 8px;
+      margin-bottom: 13px;
+    }
+
+    .skeleton-linea-nombre {
+      width: 68%;
+      height: 17px;
+    }
+
+    .skeleton-linea-descripcion {
+      width: 92%;
+    }
+
+    .skeleton-linea-descripcion-corta {
+      width: 58%;
+      margin-bottom: 0;
+    }
+
+    .skeleton-pie {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 17px 17px;
+    }
+
+    .skeleton-precio {
+      width: 28%;
+      height: 20px;
+      border-radius: 6px;
+    }
+
+    .skeleton-boton {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
     }
 
     .tarjeta-producto:hover {
@@ -692,6 +779,33 @@
       font-weight: 800;
     }
 
+    .boton-eliminar-item {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      margin-left: 2px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: transparent;
+      color: #9c9a8f;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      padding: 0;
+      transition: color 150ms ease, background 150ms ease, border-color 150ms ease, transform 150ms var(--spring);
+    }
+
+    .boton-eliminar-item:hover {
+      color: var(--danger);
+      background: #e76f5115;
+      border-color: #e76f5135;
+    }
+
+    .boton-eliminar-item:active {
+      transform: scale(0.9);
+    }
+
     .resumen-total {
       display: flex;
       align-items: center;
@@ -749,12 +863,80 @@
       background: var(--surface);
     }
 
+    .admin-producto-col-imagen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      width: 90px;
+    }
+
+    .admin-imagen-wrapper {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      border-radius: 13px;
+      overflow: hidden;
+      background: var(--surface-raised);
+    }
+
+    .admin-imagen-wrapper .admin-producto-imagen,
     .admin-producto-imagen {
       width: 90px;
       height: 90px;
       border-radius: 13px;
       object-fit: cover;
       background: var(--surface-raised);
+      display: block;
+    }
+
+    .admin-imagen-overlay-carga {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: #111210d9;
+      backdrop-filter: blur(3px);
+      color: var(--yellow);
+      font-size: 10.5px;
+      font-weight: 800;
+      text-align: center;
+      padding: 4px;
+      z-index: 2;
+    }
+
+    .boton-cambiar-foto {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+      min-height: 28px;
+      padding: 0 6px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--surface-raised);
+      color: #deddd4;
+      font-size: 11px;
+      font-weight: 750;
+      cursor: pointer;
+      text-align: center;
+      transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+    }
+
+    .boton-cambiar-foto:hover {
+      background: #2b2c26;
+      border-color: var(--yellow);
+      color: var(--yellow);
+    }
+
+    .boton-cambiar-foto.deshabilitado {
+      opacity: 0.55;
+      pointer-events: none;
+      cursor: not-allowed;
     }
 
     .admin-producto-campos {
@@ -841,6 +1023,143 @@
       margin: 14px 0 0;
       color: var(--green);
       font-size: 13px;
+    }
+
+    /* Estilos para el sistema de subida de imágenes con Cloudinary */
+    .subida-imagen-bloque {
+      display: grid;
+      gap: 10px;
+    }
+
+    .subida-preview-caja {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 110px;
+      height: 110px;
+      border: 1px solid #ffffff1c;
+      border-radius: 16px;
+      background: var(--surface-raised);
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    .subida-preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .subida-preview-quitar {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #111210d4;
+      color: #ff9b91;
+      font-size: 12px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: background 150ms ease, transform 150ms ease;
+    }
+
+    .subida-preview-quitar:hover {
+      background: var(--danger);
+      color: #fff;
+      transform: scale(1.08);
+    }
+
+    .subida-acciones {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .boton-subir-archivo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px dashed var(--yellow);
+      border-radius: 12px;
+      background: #f5c84210;
+      color: var(--yellow);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 750;
+      transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
+    }
+
+    .boton-subir-archivo:hover {
+      background: #f5c84222;
+      border-style: solid;
+      transform: translateY(-1px);
+    }
+
+    .boton-subir-archivo.deshabilitado {
+      opacity: 0.55;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    .subida-separador {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .subida-progreso {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      border: 1px solid #f5c84240;
+      border-radius: 11px;
+      background: #f5c84214;
+      color: #ffde7a;
+      font-size: 12.5px;
+      animation: fadeIn 180ms ease;
+    }
+
+    .subida-spinner {
+      width: 15px;
+      height: 15px;
+      border: 2px solid #f5c84240;
+      border-top-color: var(--yellow);
+      border-radius: 50%;
+      animation: girar 700ms linear infinite;
+    }
+
+    @keyframes girar {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .subida-error {
+      padding: 10px 13px;
+      border: 1px solid #f17f7355;
+      border-radius: 11px;
+      background: #f17f731c;
+      color: #ff9b91;
+      font-size: 12.5px;
+      line-height: 1.45;
+      word-break: break-word;
+      animation: fadeIn 180ms ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .campo {
@@ -1083,6 +1402,25 @@
         align-items: stretch;
       }
 
+      .skeleton-imagen {
+        height: auto;
+        min-height: 165px;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+      }
+
+      .skeleton-contenido {
+        grid-column: 2;
+        grid-row: 1;
+        padding: 13px 14px 4px;
+      }
+
+      .skeleton-pie {
+        grid-column: 2;
+        grid-row: 2;
+        padding: 0 14px 12px;
+      }
+
       .producto-abrir {
         grid-column: 2;
         grid-row: 1;
@@ -1146,14 +1484,30 @@
       }
 
       .admin-producto {
-        grid-template-columns: 62px minmax(0, 1fr);
+        grid-template-columns: 70px minmax(0, 1fr);
         gap: 12px;
         padding: 12px;
       }
 
-      .admin-producto-imagen {
-        width: 62px;
-        height: 62px;
+      .admin-producto-col-imagen,
+      .admin-imagen-wrapper {
+        width: 70px;
+      }
+
+      .admin-imagen-wrapper {
+        height: 70px;
+      }
+
+      .admin-producto-imagen,
+      .admin-imagen-wrapper .admin-producto-imagen {
+        width: 70px;
+        height: 70px;
+      }
+
+      .boton-cambiar-foto {
+        font-size: 10px;
+        min-height: 24px;
+        padding: 0 4px;
       }
 
       .admin-producto-campos {
@@ -1431,7 +1785,7 @@
         <div id="filtros-categoria" class="filtros" role="group" aria-label="Filtrar productos por categoría"></div>
 
         <div class="estado-firestore" id="estado-firestore" role="status" aria-live="polite" data-estado="cargando">
-          Cargando menú desde Firestore; mientras tanto se muestra el menú de respaldo.
+          Cargando productos desde Firestore...
         </div>
         <button id="reintentar-firestore" class="boton-secundario reintentar-firestore" type="button" hidden>
           Reintentar conexión
@@ -1477,19 +1831,27 @@
           <p class="panel-subtitulo">Completa tus datos para enviar el pedido.</p>
           <form id="formulario-pedido" class="formulario">
             <div class="campo">
-              <label for="nombre-cliente">Nombre</label>
-              <input id="nombre-cliente" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required>
+              <label for="nombre-cliente">Nombre del cliente *</label>
+              <input id="nombre-cliente" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre y apellido" required>
+            </div>
+            <div class="campo">
+              <label for="telefono-cliente">Teléfono de contacto *</label>
+              <input id="telefono-cliente" name="telefono" type="tel" autocomplete="tel" placeholder="Ej: 55 1234 5678" required>
             </div>
             <div class="campo">
               <label for="tipo-entrega">Tipo de entrega</label>
               <select id="tipo-entrega" name="tipo-entrega">
-                <option value="domicilio">Domicilio</option>
+                <option value="domicilio">Entrega a domicilio</option>
                 <option value="retiro">Retiro en el local</option>
               </select>
             </div>
             <div class="campo" id="campo-direccion">
-              <label for="direccion">Dirección</label>
-              <input id="direccion" name="direccion" type="text" autocomplete="street-address" placeholder="Calle, número y referencia" required>
+              <label for="direccion">Dirección de entrega *</label>
+              <input id="direccion" name="direccion" type="text" autocomplete="street-address" placeholder="Calle, número, colonia o referencia" required>
+            </div>
+            <div class="campo">
+              <label for="observaciones-pedido">Observaciones (opcional)</label>
+              <textarea id="observaciones-pedido" name="observaciones" rows="2" placeholder="Ej: Sin cebolla, salsas aparte, cambio de $200..."></textarea>
             </div>
             <p class="ayuda">Se abrirá WhatsApp con el resumen listo para enviar. El pedido se confirma al enviarlo desde WhatsApp. No se realizan pagos en esta página.</p>
             <button id="boton-whatsapp" class="boton boton-whatsapp" type="submit">Enviar pedido por WhatsApp <span aria-hidden="true">↗</span></button>
@@ -1542,9 +1904,38 @@
             <label for="nuevo-descripcion">Descripción</label>
             <input id="nuevo-descripcion" name="descripcion" type="text" maxlength="180" required>
           </div>
-          <div class="campo">
-            <label for="nuevo-imagen">URL de la imagen</label>
-            <input id="nuevo-imagen" name="imagen" type="url" placeholder="https://..." required>
+          <div class="campo campo-imagen-upload">
+            <label for="nuevo-imagen">Imagen del producto</label>
+            
+            <div class="subida-imagen-bloque">
+              <!-- Vista previa de la imagen -->
+              <div id="nuevo-preview-contenedor" class="subida-preview-caja" hidden>
+                <img id="nuevo-preview-img" src="" alt="Vista previa del nuevo producto" class="subida-preview-img">
+                <button type="button" class="subida-preview-quitar" onclick="quitarImagenNuevoProducto()" aria-label="Quitar imagen seleccionada" title="Quitar imagen">✕</button>
+              </div>
+
+              <!-- Selector de archivo desde el dispositivo -->
+              <div class="subida-acciones">
+                <label class="boton-subir-archivo" id="nuevo-label-archivo">
+                  <input type="file" id="nuevo-archivo" accept="image/jpeg,image/png,image/webp,image/gif" hidden onchange="manejarSubidaImagenNuevo(this)">
+                  <span class="subida-icono" aria-hidden="true">📷</span>
+                  <span id="nuevo-subida-texto">Subir foto desde el dispositivo</span>
+                </label>
+                <span class="subida-separador">o ingresa el enlace directo:</span>
+              </div>
+
+              <!-- Campo URL (se auto-rellena con Cloudinary o permite ingreso manual) -->
+              <input id="nuevo-imagen" name="imagen" type="url" placeholder="https://res.cloudinary.com/..." required oninput="actualizarPreviewManualNuevo(this.value)">
+
+              <!-- Indicador de carga -->
+              <div id="nuevo-progreso" class="subida-progreso" hidden role="status" aria-live="polite">
+                <span class="subida-spinner" aria-hidden="true"></span>
+                <span id="nuevo-progreso-texto">Subiendo imagen a Cloudinary...</span>
+              </div>
+
+              <!-- Mensajes de error -->
+              <div id="nuevo-subida-error" class="subida-error" hidden role="alert"></div>
+            </div>
           </div>
           <div class="campo">
             <label for="nuevo-categoria">Categoría</label>
@@ -1639,8 +2030,12 @@
   </nav>
 
   <script>
+    // Configuración del número de WhatsApp del negocio en este único lugar.
+    // Formato internacional con código de país, solo dígitos (ej: "5215512345678").
+    // Si se deja vacío (""), WhatsApp abrirá la conversación permitiendo elegir el destinatario.
     const WHATSAPP_NEGOCIO = "";
     const CLAVE_CARRITO = "domingoFoodCarrito";
+    const CLAVE_CLIENTE = "domingoFoodCliente";
     const CLAVE_MENU_DEMO = "domingoFoodMenuDemo";
     const MENU_ORIGINAL = [
       {
@@ -1681,6 +2076,7 @@
     let productoSeleccionado = null;
     let vistaActual = "inicio";
     let tokenTransicionVista = 0;
+    let estadoCargaMenu = "cargando";
 
     function cargarProductos() {
       const guardados = localStorage.getItem(CLAVE_CARRITO);
@@ -1845,6 +2241,194 @@
       return campo;
     }
 
+    const CLOUDINARY_CLOUD_NAME = "xv1ywrua";
+    const CLOUDINARY_UPLOAD_PRESET = "domingo_food";
+    const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/" + CLOUDINARY_CLOUD_NAME + "/image/upload";
+
+    async function subirImagenACloudinary(archivo, onProgress) {
+      if (!window.usuarioAdminActual || !window.usuarioAdminActual.autorizado) {
+        throw new Error("Acceso no autorizado: debes iniciar sesión como administrador para subir imágenes.");
+      }
+
+      if (!archivo || !(archivo instanceof File)) {
+        throw new Error("No se ha seleccionado ningún archivo.");
+      }
+
+      const tiposPermitidos = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
+      if (!tiposPermitidos.includes(archivo.type) && !archivo.type.startsWith("image/")) {
+        throw new Error("Formato de imagen no compatible. Usa JPG, PNG, WebP o GIF.");
+      }
+
+      const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+      if (archivo.size > MAX_BYTES) {
+        throw new Error("La imagen supera los 10 MB. Elige una imagen más liviana.");
+      }
+
+      const formData = new FormData();
+      formData.append("file", archivo);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", CLOUDINARY_UPLOAD_URL);
+
+        if (onProgress && xhr.upload) {
+          xhr.upload.onprogress = evento => {
+            if (evento.lengthComputable) {
+              const porcentaje = Math.round((evento.loaded / evento.total) * 100);
+              onProgress(porcentaje);
+            }
+          };
+        }
+
+        xhr.onload = () => {
+          try {
+            const respuesta = JSON.parse(xhr.responseText);
+            if (xhr.status >= 200 && xhr.status < 300 && respuesta.secure_url) {
+              resolve(respuesta.secure_url);
+            } else {
+              const mensajeError = (respuesta && respuesta.error && respuesta.error.message)
+                ? respuesta.error.message
+                : "Error al procesar la imagen en Cloudinary (" + xhr.status + ").";
+              reject(new Error(mensajeError));
+            }
+          } catch (err) {
+            reject(new Error("Respuesta no válida del servicio de imágenes."));
+          }
+        };
+
+        xhr.onerror = () => {
+          reject(new Error("Error de red al conectar con Cloudinary. Comprueba tu conexión a internet."));
+        };
+
+        xhr.send(formData);
+      });
+    }
+
+    async function manejarSubidaImagenNuevo(input) {
+      const archivo = input.files && input.files[0];
+      if (!archivo) return;
+
+      const previewContenedor = document.getElementById("nuevo-preview-contenedor");
+      const previewImg = document.getElementById("nuevo-preview-img");
+      const progreso = document.getElementById("nuevo-progreso");
+      const progresoTexto = document.getElementById("nuevo-progreso-texto");
+      const errorBox = document.getElementById("nuevo-subida-error");
+      const inputUrl = document.getElementById("nuevo-imagen");
+      const labelSubir = document.getElementById("nuevo-label-archivo");
+      const textoSubir = document.getElementById("nuevo-subida-texto");
+      const submitBtn = document.querySelector("#formulario-nuevo-producto button[type='submit']");
+
+      if (errorBox) {
+        errorBox.hidden = true;
+        errorBox.textContent = "";
+      }
+
+      // Previsualización local inmediata
+      const urlTemporal = URL.createObjectURL(archivo);
+      if (previewImg && previewContenedor) {
+        previewImg.src = urlTemporal;
+        previewContenedor.hidden = false;
+      }
+
+      if (progreso) {
+        progreso.hidden = false;
+      }
+      if (progresoTexto) {
+        progresoTexto.textContent = "Subiendo imagen a Cloudinary (0%)...";
+      }
+      if (labelSubir) {
+        labelSubir.classList.add("deshabilitado");
+      }
+      if (submitBtn) {
+        submitBtn.disabled = true;
+      }
+
+      try {
+        const secureUrl = await subirImagenACloudinary(archivo, porcentaje => {
+          if (progresoTexto) {
+            progresoTexto.textContent = "Subiendo imagen a Cloudinary (" + porcentaje + "%)...";
+          }
+        });
+
+        if (inputUrl) {
+          inputUrl.value = secureUrl;
+        }
+        if (previewImg) {
+          previewImg.src = secureUrl;
+        }
+        if (textoSubir) {
+          textoSubir.textContent = "✓ Foto subida (clic para cambiar)";
+        }
+        if (progreso) {
+          progreso.hidden = true;
+        }
+      } catch (error) {
+        console.error("Error al subir imagen de nuevo producto:", error);
+        if (errorBox) {
+          errorBox.textContent = "Error al subir a Cloudinary: " + (error.message || error);
+          errorBox.hidden = false;
+        }
+        if (!inputUrl || !inputUrl.value) {
+          if (previewContenedor) previewContenedor.hidden = true;
+        }
+        if (textoSubir) {
+          textoSubir.textContent = "Subir foto desde el dispositivo";
+        }
+        if (progreso) {
+          progreso.hidden = true;
+        }
+      } finally {
+        if (labelSubir) {
+          labelSubir.classList.remove("deshabilitado");
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+        }
+        input.value = "";
+      }
+    }
+
+    function quitarImagenNuevoProducto() {
+      const inputUrl = document.getElementById("nuevo-imagen");
+      const previewContenedor = document.getElementById("nuevo-preview-contenedor");
+      const previewImg = document.getElementById("nuevo-preview-img");
+      const archivoInput = document.getElementById("nuevo-archivo");
+      const errorBox = document.getElementById("nuevo-subida-error");
+      const progreso = document.getElementById("nuevo-progreso");
+      const textoSubir = document.getElementById("nuevo-subida-texto");
+
+      if (inputUrl) inputUrl.value = "";
+      if (previewImg) previewImg.src = "";
+      if (previewContenedor) previewContenedor.hidden = true;
+      if (archivoInput) archivoInput.value = "";
+      if (errorBox) {
+        errorBox.hidden = true;
+        errorBox.textContent = "";
+      }
+      if (progreso) progreso.hidden = true;
+      if (textoSubir) textoSubir.textContent = "Subir foto desde el dispositivo";
+    }
+
+    function actualizarPreviewManualNuevo(valor) {
+      const previewContenedor = document.getElementById("nuevo-preview-contenedor");
+      const previewImg = document.getElementById("nuevo-preview-img");
+      const textoSubir = document.getElementById("nuevo-subida-texto");
+      const url = String(valor).trim();
+
+      if (urlImagenValida(url)) {
+        if (previewImg && previewContenedor) {
+          previewImg.src = url;
+          previewContenedor.hidden = false;
+        }
+        if (textoSubir) textoSubir.textContent = "Cambiar foto desde el dispositivo";
+      } else {
+        if (previewContenedor) previewContenedor.hidden = true;
+        if (previewImg) previewImg.src = "";
+        if (textoSubir) textoSubir.textContent = "Subir foto desde el dispositivo";
+      }
+    }
+
     function renderizarAdmin() {
       const lista = document.getElementById("admin-lista");
       lista.replaceChildren();
@@ -1853,11 +2437,43 @@
         const tarjeta = document.createElement("article");
         tarjeta.className = "admin-producto";
 
+        // Columna de imagen con selector desde el dispositivo
+        const colImagen = document.createElement("div");
+        colImagen.className = "admin-producto-col-imagen";
+
+        const wrapperImagen = document.createElement("div");
+        wrapperImagen.className = "admin-imagen-wrapper";
+
         const imagen = document.createElement("img");
         imagen.className = "admin-producto-imagen";
         imagen.src = producto.imagen;
         imagen.alt = "Vista previa: " + producto.nombre;
         imagen.loading = "lazy";
+
+        const overlayCarga = document.createElement("div");
+        overlayCarga.className = "admin-imagen-overlay-carga";
+        overlayCarga.hidden = true;
+        const spinnerThumb = document.createElement("div");
+        spinnerThumb.className = "subida-spinner";
+        const textoThumb = document.createElement("span");
+        textoThumb.textContent = "Subiendo...";
+        overlayCarga.append(spinnerThumb, textoThumb);
+        wrapperImagen.append(imagen, overlayCarga);
+
+        const labelCambiar = document.createElement("label");
+        labelCambiar.className = "boton-cambiar-foto";
+        labelCambiar.title = "Subir foto desde el dispositivo para " + producto.nombre;
+
+        const inputArchivo = document.createElement("input");
+        inputArchivo.type = "file";
+        inputArchivo.accept = "image/jpeg,image/png,image/webp,image/gif";
+        inputArchivo.hidden = true;
+
+        const textoBoton = document.createElement("span");
+        textoBoton.textContent = "📷 Cambiar";
+        labelCambiar.append(inputArchivo, textoBoton);
+
+        colImagen.append(wrapperImagen, labelCambiar);
 
         const formulario = document.createElement("form");
         formulario.className = "admin-producto-campos";
@@ -1865,13 +2481,74 @@
         formulario.append(
           crearCampoAdmin("Nombre", "nombre", producto.nombre),
           crearCampoAdmin("Precio", "precio", producto.precio.toFixed(2), "number"),
-          crearCampoAdmin("Descripción", "descripcion", producto.descripcion),
-          crearCampoAdmin("URL de la imagen", "imagen", producto.imagen, "url")
+          crearCampoAdmin("Descripción", "descripcion", producto.descripcion)
         );
+
+        const campoImagen = crearCampoAdmin("URL de la imagen", "imagen", producto.imagen, "url");
+        const inputUrlDirecta = campoImagen.querySelector("input");
+        if (inputUrlDirecta) {
+          inputUrlDirecta.addEventListener("input", () => {
+            if (urlImagenValida(inputUrlDirecta.value.trim())) {
+              imagen.src = inputUrlDirecta.value.trim();
+            }
+          });
+        }
+        formulario.appendChild(campoImagen);
 
         formulario.appendChild(
           crearCampoAdmin("Categoría", "categoria", producto.categoria)
         );
+
+        // Evento de subida a Cloudinary para producto existente
+        inputArchivo.addEventListener("change", async () => {
+          const archivo = inputArchivo.files && inputArchivo.files[0];
+          if (!archivo) return;
+
+          const previewLocalUrl = URL.createObjectURL(archivo);
+          imagen.src = previewLocalUrl;
+          overlayCarga.hidden = false;
+          labelCambiar.classList.add("deshabilitado");
+          mostrarEstadoAdmin("Subiendo imagen a Cloudinary para " + producto.nombre + "...", false);
+
+          try {
+            const secureUrl = await subirImagenACloudinary(archivo, pct => {
+              textoThumb.textContent = pct + "%";
+            });
+
+            imagen.src = secureUrl;
+            if (inputUrlDirecta) {
+              inputUrlDirecta.value = secureUrl;
+            }
+            producto.imagen = secureUrl;
+
+            // Guardar inmediatamente en Firestore si estamos autenticados
+            if (window.guardarProductoFirestore && window.usuarioAdminActual && window.usuarioAdminActual.autorizado) {
+              const datosActualizar = {
+                ...producto,
+                imagen: secureUrl
+              };
+              await window.guardarProductoFirestore(producto.id, datosActualizar);
+              mostrarEstadoAdmin("✓ Foto subida a Cloudinary y guardada en Firestore para: " + producto.nombre);
+            } else {
+              guardarMenu();
+              mostrarEstadoAdmin("✓ Foto subida a Cloudinary y guardada localmente para: " + producto.nombre);
+            }
+
+            renderizarProductos();
+            if (productoSeleccionado && productoSeleccionado.id === producto.id) {
+              productoSeleccionado.imagen = secureUrl;
+            }
+          } catch (error) {
+            console.error("Error al subir foto de producto a Cloudinary:", error);
+            imagen.src = producto.imagen;
+            mostrarEstadoAdmin("Error al subir imagen a Cloudinary: " + (error.message || error), true);
+          } finally {
+            overlayCarga.hidden = true;
+            labelCambiar.classList.remove("deshabilitado");
+            textoThumb.textContent = "Subiendo...";
+            inputArchivo.value = "";
+          }
+        });
 
         const acciones = document.createElement("div");
         acciones.className = "admin-producto-acciones";
@@ -1893,7 +2570,7 @@
         eliminar.className = "boton-secundario";
         eliminar.type = "button";
         eliminar.textContent = "Eliminar";
-        eliminar.setAttribute("aria-label", "Eliminar " + producto.nombre + " del menú de demostración");
+        eliminar.setAttribute("aria-label", "Eliminar " + producto.nombre + " del menú");
         eliminar.addEventListener("click", () => eliminarProducto(producto.id));
         botones.append(guardar, eliminar);
         acciones.append(disponibleLabel, botones);
@@ -1903,7 +2580,8 @@
           evento.preventDefault();
           guardarCambiosProducto(formulario);
         });
-        tarjeta.append(imagen, formulario);
+
+        tarjeta.append(colImagen, formulario);
         lista.appendChild(tarjeta);
       });
     }
@@ -1993,6 +2671,7 @@
           const nuevoId = await window.agregarProductoFirestore(producto);
           producto.id = nuevoId;
           formulario.reset();
+          quitarImagenNuevoProducto();
           document.getElementById("admin-agregar").open = false;
           mostrarEstadoAdmin("✓ Producto añadido correctamente a Firestore.");
         } catch (error) {
@@ -2011,6 +2690,7 @@
           return;
         }
         formulario.reset();
+        quitarImagenNuevoProducto();
         document.getElementById("admin-agregar").open = false;
         mostrarEstadoAdmin("Producto añadido al menú local.");
       }
@@ -2095,15 +2775,28 @@
     }
 
     function quitar(indice) {
+      cambiarCantidad(indice, -1);
+    }
+
+    function cambiarCantidad(indice, delta) {
       const producto = productos[indice];
       if (!producto) {
         return;
       }
-      producto.cantidad -= 1;
-      if (producto.cantidad === 0) {
+      const nuevaCantidad = producto.cantidad + delta;
+      if (nuevaCantidad <= 0) {
         productos.splice(indice, 1);
+      } else {
+        producto.cantidad = nuevaCantidad;
       }
       actualizarCarrito();
+    }
+
+    function eliminarDelCarrito(indice) {
+      if (indice >= 0 && indice < productos.length) {
+        productos.splice(indice, 1);
+        actualizarCarrito();
+      }
     }
 
     function vaciarCarrito() {
@@ -2151,7 +2844,7 @@
         menos.type = "button";
         menos.textContent = "−";
         menos.setAttribute("aria-label", "Quitar una unidad de " + producto.nombre);
-        menos.onclick = () => quitar(indice);
+        menos.onclick = () => cambiarCantidad(indice, -1);
 
         const cantidad = document.createElement("span");
         cantidad.className = "cantidad";
@@ -2163,9 +2856,17 @@
         mas.type = "button";
         mas.textContent = "+";
         mas.setAttribute("aria-label", "Agregar una unidad de " + producto.nombre);
-        mas.onclick = () => agregar(producto.nombre, producto.precio);
+        mas.onclick = () => cambiarCantidad(indice, 1);
 
-        controles.append(menos, cantidad, mas);
+        const eliminar = document.createElement("button");
+        eliminar.className = "boton-eliminar-item";
+        eliminar.type = "button";
+        eliminar.innerHTML = "&times;";
+        eliminar.title = "Quitar " + producto.nombre + " del carrito";
+        eliminar.setAttribute("aria-label", "Quitar " + producto.nombre + " del carrito");
+        eliminar.onclick = () => eliminarDelCarrito(indice);
+
+        controles.append(menos, cantidad, mas, eliminar);
         fila.append(detalle, controles);
         lista.appendChild(fila);
       });
@@ -2181,10 +2882,70 @@
       contador.classList.remove("bump");
       void contador.offsetWidth;
       contador.classList.add("bump");
-      document.getElementById("boton-whatsapp").disabled = productos.length === 0;
+      const botonWhatsapp = document.getElementById("boton-whatsapp");
+      if (botonWhatsapp) {
+        botonWhatsapp.disabled = productos.length === 0;
+      }
     }
 
+    function renderizarSkeletonProductos() {
+      const contenedor = document.getElementById("productos");
+      const tarjetas = Array.from({ length: 6 }, () => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "tarjeta-producto tarjeta-skeleton";
+        tarjeta.setAttribute("aria-hidden", "true");
+
+        const imagen = document.createElement("div");
+        imagen.className = "skeleton-bloque skeleton-imagen";
+
+        const contenido = document.createElement("div");
+        contenido.className = "skeleton-contenido";
+        ["skeleton-linea-categoria", "skeleton-linea-nombre", "skeleton-linea-descripcion", "skeleton-linea-descripcion skeleton-linea-descripcion-corta"]
+          .forEach(clase => {
+            const linea = document.createElement("div");
+            linea.className = "skeleton-bloque skeleton-linea " + clase;
+            contenido.appendChild(linea);
+          });
+
+        const pie = document.createElement("div");
+        pie.className = "skeleton-pie";
+        const precio = document.createElement("div");
+        precio.className = "skeleton-bloque skeleton-precio";
+        const boton = document.createElement("div");
+        boton.className = "skeleton-bloque skeleton-boton";
+        pie.append(precio, boton);
+
+        tarjeta.append(imagen, contenido, pie);
+        return tarjeta;
+      });
+      contenedor.replaceChildren(...tarjetas);
+    }
+
+    window.actualizarEstadoCargaMenu = function(estado) {
+      estadoCargaMenu = estado;
+      renderizarProductos();
+    };
+
     function renderizarProductos() {
+      const contenedor = document.getElementById("productos");
+      contenedor.replaceChildren();
+
+      if (estadoCargaMenu === "cargando") {
+        document.getElementById("filtros-categoria").replaceChildren();
+        if (
+          !contenedor.firstElementChild ||
+          !contenedor.firstElementChild.classList.contains("tarjeta-skeleton")
+        ) {
+          renderizarSkeletonProductos();
+        }
+        return;
+      }
+
+      if (estadoCargaMenu !== "conectado") {
+        document.getElementById("filtros-categoria").replaceChildren();
+        return;
+      }
+
       renderizarFiltros();
       const consulta = document.getElementById("buscador").value.trim().toLocaleLowerCase("es");
       const coincidencias = MENU.filter(producto => {
@@ -2197,13 +2958,12 @@
         return coincideCategoria && coincideBusqueda;
       });
 
-      const contenedor = document.getElementById("productos");
-      contenedor.replaceChildren();
-
       if (coincidencias.length === 0) {
         const mensaje = document.createElement("p");
         mensaje.className = "sin-resultados";
-        mensaje.textContent = "No encontramos productos con esa búsqueda.";
+        mensaje.textContent = MENU.length === 0
+          ? "Todavía no hay productos disponibles."
+          : "No encontramos productos con esa búsqueda.";
         contenedor.appendChild(mensaje);
         return;
       }
@@ -2460,59 +3220,171 @@
       }
     });
 
-    function actualizarTipoEntrega() {
-      const domicilio = document.getElementById("tipo-entrega").value === "domicilio";
-      const campo = document.getElementById("campo-direccion");
-      const direccion = document.getElementById("direccion");
-      campo.hidden = !domicilio;
-      direccion.required = domicilio;
-      if (!domicilio) {
-        direccion.value = "";
+    function guardarDatosCliente() {
+      try {
+        const nombreInput = document.getElementById("nombre-cliente");
+        const telefonoInput = document.getElementById("telefono-cliente");
+        const tipoEntregaSelect = document.getElementById("tipo-entrega");
+        const direccionInput = document.getElementById("direccion");
+        const observacionesInput = document.getElementById("observaciones-pedido");
+
+        const datos = {
+          nombre: nombreInput ? nombreInput.value : "",
+          telefono: telefonoInput ? telefonoInput.value : "",
+          tipoEntrega: tipoEntregaSelect ? tipoEntregaSelect.value : "domicilio",
+          direccion: direccionInput ? direccionInput.value : "",
+          observaciones: observacionesInput ? observacionesInput.value : ""
+        };
+        localStorage.setItem(CLAVE_CLIENTE, JSON.stringify(datos));
+      } catch (error) {
+        console.error("No se pudieron guardar los datos del cliente.", error);
       }
     }
 
-    function pedir() {
-      if (productos.length === 0) {
-        alert("Primero agrega un producto.");
+    function cargarDatosCliente() {
+      let guardados;
+      try {
+        guardados = localStorage.getItem(CLAVE_CLIENTE);
+      } catch (error) {
+        console.error("No se pudieron leer los datos del cliente.", error);
         return;
       }
 
-      const nombre = document.getElementById("nombre-cliente").value.trim();
-      const tipoEntrega = document.getElementById("tipo-entrega").value;
-      const direccion = document.getElementById("direccion").value.trim();
+      if (!guardados) {
+        return;
+      }
+
+      try {
+        const datos = JSON.parse(guardados);
+        if (datos && typeof datos === "object") {
+          const nombreInput = document.getElementById("nombre-cliente");
+          const telefonoInput = document.getElementById("telefono-cliente");
+          const tipoEntregaSelect = document.getElementById("tipo-entrega");
+          const direccionInput = document.getElementById("direccion");
+          const observacionesInput = document.getElementById("observaciones-pedido");
+
+          if (nombreInput && typeof datos.nombre === "string") {
+            nombreInput.value = datos.nombre;
+          }
+          if (telefonoInput && typeof datos.telefono === "string") {
+            telefonoInput.value = datos.telefono;
+          }
+          if (tipoEntregaSelect && (datos.tipoEntrega === "domicilio" || datos.tipoEntrega === "retiro")) {
+            tipoEntregaSelect.value = datos.tipoEntrega;
+          }
+          if (direccionInput && typeof datos.direccion === "string") {
+            direccionInput.value = datos.direccion;
+          }
+          if (observacionesInput && typeof datos.observaciones === "string") {
+            observacionesInput.value = datos.observaciones;
+          }
+        }
+      } catch (error) {
+        console.error("Los datos del cliente guardados tienen un formato no válido.", error);
+      }
+    }
+
+    function actualizarTipoEntrega() {
+      const select = document.getElementById("tipo-entrega");
+      const esDomicilio = select ? select.value === "domicilio" : true;
+      const campo = document.getElementById("campo-direccion");
+      const direccion = document.getElementById("direccion");
+      if (campo) {
+        campo.hidden = !esDomicilio;
+      }
+      if (direccion) {
+        direccion.required = esDomicilio;
+      }
+      guardarDatosCliente();
+    }
+
+    function pedir() {
+      if (!productos || productos.length === 0) {
+        alert("Tu carrito está vacío. Agrega al menos un producto para realizar tu pedido.");
+        irA("inicio");
+        return;
+      }
+
+      const nombreInput = document.getElementById("nombre-cliente");
+      const telefonoInput = document.getElementById("telefono-cliente");
+      const tipoEntregaSelect = document.getElementById("tipo-entrega");
+      const direccionInput = document.getElementById("direccion");
+      const observacionesInput = document.getElementById("observaciones-pedido");
+
+      const nombre = (nombreInput ? nombreInput.value : "").trim();
+      const telefono = (telefonoInput ? telefonoInput.value : "").trim();
+      const tipoEntrega = tipoEntregaSelect ? tipoEntregaSelect.value : "domicilio";
+      const direccion = (direccionInput ? direccionInput.value : "").trim();
+      const observaciones = (observacionesInput ? observacionesInput.value : "").trim();
+
       if (!nombre) {
-        alert("Escribe tu nombre para continuar.");
-        document.getElementById("nombre-cliente").focus();
+        alert("Por favor, ingresa tu nombre completo para continuar.");
+        if (nombreInput) {
+          nombreInput.focus();
+        }
         return;
       }
+
+      const digitosTelefono = telefono.replace(/\D/g, "");
+      if (!telefono || digitosTelefono.length < 7) {
+        alert("Por favor, ingresa un número de teléfono de contacto válido (mínimo 7 dígitos).");
+        if (telefonoInput) {
+          telefonoInput.focus();
+        }
+        return;
+      }
+
       if (tipoEntrega === "domicilio" && !direccion) {
-        alert("Escribe tu dirección para la entrega a domicilio.");
-        document.getElementById("direccion").focus();
+        alert("Por favor, ingresa tu dirección de entrega (calle, número y referencia).");
+        if (direccionInput) {
+          direccionInput.focus();
+        }
         return;
       }
+
+      guardarDatosCliente();
 
       const lineas = [
-        "Hola, quiero hacer este pedido en Domingo Food:",
+        "👋 ¡Hola! Quiero realizar el siguiente pedido en *Domingo Food*:",
         "",
-        "Nombre: " + nombre,
-        "Entrega: " + (tipoEntrega === "domicilio" ? "Domicilio" : "Retiro en el local")
+        "📋 *DATOS DEL CLIENTE*",
+        "• *Nombre:* " + nombre,
+        "• *Teléfono:* " + telefono,
+        "• *Modalidad:* " + (tipoEntrega === "domicilio" ? "Entrega a domicilio 🛵" : "Retiro en el local 🏪")
       ];
+
       if (tipoEntrega === "domicilio") {
-        lineas.push("Dirección: " + direccion);
+        lineas.push("• *Dirección:* " + direccion);
       }
-      lineas.push("", "Pedido:");
+
+      if (observaciones) {
+        lineas.push("• *Observaciones:* " + observaciones);
+      }
+
+      lineas.push(
+        "",
+        "🛒 *DETALLE DEL PEDIDO*"
+      );
+
       productos.forEach(producto => {
+        const subtotal = producto.precio * producto.cantidad;
         lineas.push(
-          "- " + producto.nombre + " x" + producto.cantidad +
-          " ($" + (producto.precio * producto.cantidad).toFixed(2) + ")"
+          "• " + producto.cantidad + "x " + producto.nombre + " — $" + producto.precio.toFixed(2) + " c/u ($" + subtotal.toFixed(2) + ")"
         );
       });
-      lineas.push("", "Total: $" + total.toFixed(2));
 
-      const numero = WHATSAPP_NEGOCIO.replace(/\D/g, "");
-      const destino = numero
-        ? "https://wa.me/" + numero
+      lineas.push(
+        "",
+        "💰 *TOTAL A PAGAR:* $" + total.toFixed(2),
+        "",
+        "Quedo a la espera de su confirmación. ¡Muchas gracias!"
+      );
+
+      const numeroNegocioLimpio = WHATSAPP_NEGOCIO.replace(/\D/g, "");
+      const destino = numeroNegocioLimpio
+        ? "https://wa.me/" + numeroNegocioLimpio
         : "https://wa.me/";
+
       window.open(
         destino + "?text=" + encodeURIComponent(lineas.join("\n")),
         "_blank",
@@ -2530,10 +3402,14 @@
       renderizarProductos();
     });
     document.getElementById("tipo-entrega").addEventListener("change", actualizarTipoEntrega);
-    document.getElementById("formulario-pedido").addEventListener("submit", evento => {
-      evento.preventDefault();
-      pedir();
-    });
+    const formPedido = document.getElementById("formulario-pedido");
+    if (formPedido) {
+      formPedido.addEventListener("input", guardarDatosCliente);
+      formPedido.addEventListener("submit", evento => {
+        evento.preventDefault();
+        pedir();
+      });
+    }
     document.getElementById("formulario-nuevo-producto").addEventListener("submit", agregarProductoAdmin);
 
     window.aplicarMenuFirestore = function(menuFirestore) {
@@ -2541,6 +3417,7 @@
         ...producto,
         imagen: producto.imagen.trim() || MENU_ORIGINAL[0].imagen
       }));
+      estadoCargaMenu = "conectado";
       renderizarProductos();
       renderizarAdmin();
     };
@@ -2549,6 +3426,7 @@
     productos = cargarProductos();
     renderizarProductos();
     renderizarAdmin();
+    cargarDatosCliente();
     actualizarTipoEntrega();
     actualizarCarrito();
   </script>
@@ -2828,7 +3706,10 @@
     async function cargarDesdeFirestore() {
       reintentar.hidden = true;
       reintentar.disabled = true;
-      mostrarEstado("Cargando menú desde Firestore...", "cargando");
+      MENU = [];
+      window.renderizarAdmin();
+      window.actualizarEstadoCargaMenu("cargando");
+      mostrarEstado("Cargando productos desde Firestore...", "cargando");
 
       try {
         const { collection, getDocs } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
@@ -2838,11 +3719,13 @@
 
         const resultado = await getDocs(collection(firestoreDb, NOMBRE_COLECCION));
         if (resultado.empty) {
+          estadoCargaMenu = "conectado";
+          renderizarProductos();
+          window.renderizarAdmin();
           mostrarEstado(
-            "La colección productos está vacía. Se conserva el menú local de respaldo; añade productos desde el panel de administración.",
-            "error"
+            "La colección productos está vacía. Añade productos desde el panel de administración.",
+            "conectado"
           );
-          reintentar.hidden = false;
           return;
         }
 
@@ -2880,14 +3763,17 @@
         window.aplicarMenuFirestore(validos);
         mostrarEstado("Menú sincronizado con Firestore.", "conectado");
       } catch (error) {
-        console.error("No se pudo cargar el menú de Firestore; se mantiene el menú de respaldo.", error);
+        console.error("No se pudo cargar el menú de Firestore.", error);
+        MENU = [];
+        window.renderizarAdmin();
+        window.actualizarEstadoCargaMenu("error");
         const codigo = typeof error.code === "string" ? error.code : "";
         const detalle = codigo === "permission-denied"
           ? " Comprueba que las reglas permitan leer productos y denieguen escrituras públicas."
           : codigo
             ? " Código: " + codigo + "."
             : " Revisa la configuración Firebase y el esquema de la colección.";
-        mostrarEstado("No se pudo cargar Firestore. Se muestra el menú local de respaldo." + detalle, "error");
+        mostrarEstado("No se pudieron cargar los productos. Inténtalo de nuevo." + detalle, "error");
         reintentar.hidden = false;
       } finally {
         reintentar.disabled = false;
