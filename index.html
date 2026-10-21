@@ -1735,6 +1735,391 @@
     .admin-aviso-seguridad strong {
       color: var(--yellow);
     }
+
+    /* Pestañas del Panel de Administración */
+    .admin-pestanas {
+      display: flex;
+      gap: 10px;
+      margin: 16px 0 22px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+      overflow-x: auto;
+    }
+
+    .admin-pestana {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms var(--spring);
+    }
+
+    .admin-pestana:hover {
+      color: var(--text);
+      border-color: #ffffff30;
+    }
+
+    .admin-pestana.activa {
+      background: var(--yellow);
+      color: #1a1913;
+      border-color: var(--yellow);
+    }
+
+    .badge-contador {
+      display: inline-grid;
+      place-items: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: 99px;
+      background: #e76f51;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .admin-pestana.activa .badge-contador {
+      background: #1a1913;
+      color: var(--yellow);
+    }
+
+    /* Barra superior de pedidos en tiempo real */
+    .admin-pedidos-barra-sup {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .admin-pedidos-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--green);
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 99px;
+      background: #91c88918;
+      border: 1px solid #91c88935;
+    }
+
+    .admin-pedidos-live-punto {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulsoLive 2s infinite ease-in-out;
+    }
+
+    @keyframes pulsoLive {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Filtros de pedidos */
+    .admin-pedidos-filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .filtro-pedido {
+      padding: 7px 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 150ms ease;
+    }
+
+    .filtro-pedido:hover {
+      color: var(--text);
+      border-color: #ffffff28;
+    }
+
+    .filtro-pedido.activo {
+      background: var(--surface-raised);
+      color: var(--yellow);
+      border-color: var(--yellow);
+    }
+
+    /* Lista y Tarjetas de Pedidos */
+    .admin-pedidos-lista {
+      display: grid;
+      gap: 16px;
+    }
+
+    .admin-pedidos-vacio {
+      padding: 36px 20px;
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      background: var(--surface);
+    }
+
+    .admin-pedido-tarjeta {
+      border: 1px solid #ffffff14;
+      border-radius: 18px;
+      background: var(--surface);
+      padding: 18px 20px;
+      display: grid;
+      gap: 14px;
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+      animation: fila-entrada 220ms ease both;
+    }
+
+    .admin-pedido-tarjeta:hover {
+      border-color: #ffffff25;
+      box-shadow: 0 8px 24px #00000030;
+    }
+
+    .admin-pedido-cabecera {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .admin-pedido-id-grupo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-pedido-ref {
+      font-family: monospace;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--yellow);
+      background: var(--surface-raised);
+      padding: 3px 8px;
+      border-radius: 7px;
+      border: 1px solid #f5c84235;
+    }
+
+    .admin-pedido-fecha {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Badges de estado */
+    .badge-estado {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 11px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      border: 1px solid transparent;
+    }
+
+    .estado-pendiente {
+      background: #f5c84218;
+      color: #f5c842;
+      border-color: #f5c84240;
+    }
+
+    .estado-aceptado {
+      background: #38bdf818;
+      color: #38bdf8;
+      border-color: #38bdf840;
+    }
+
+    .estado-preparando {
+      background: #fb923c18;
+      color: #fb923c;
+      border-color: #fb923c40;
+    }
+
+    .estado-encamino {
+      background: #c084fc18;
+      color: #c084fc;
+      border-color: #c084fc40;
+    }
+
+    .estado-entregado {
+      background: #4ade8018;
+      color: #4ade80;
+      border-color: #4ade8040;
+    }
+
+    /* Cuerpo del pedido: datos del cliente */
+    .admin-pedido-cuerpo {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 760px) {
+      .admin-pedido-cuerpo {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .admin-pedido-cliente-bloque {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .admin-pedido-cliente-bloque strong {
+      color: var(--text);
+    }
+
+    .admin-pedido-cliente-bloque .dato-icono {
+      color: var(--muted);
+      margin-right: 4px;
+    }
+
+    .admin-pedido-telefono-link {
+      color: var(--yellow);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .admin-pedido-telefono-link:hover {
+      text-decoration: underline;
+    }
+
+    .admin-pedido-obs-caja {
+      margin-top: 6px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: var(--surface-raised);
+      border-left: 3px solid var(--yellow);
+      font-size: 12.5px;
+      color: #deddd4;
+    }
+
+    /* Lista de productos en el pedido */
+    .admin-pedido-items-bloque {
+      background: var(--surface-raised);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .admin-pedido-items-titulo {
+      font-size: 12px;
+      font-weight: 750;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .admin-pedido-item-fila {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 4px 0;
+      font-size: 13px;
+      border-bottom: 1px dashed #ffffff10;
+    }
+
+    .admin-pedido-item-fila:last-child {
+      border-bottom: none;
+    }
+
+    /* Pie del pedido: total y selector de estado */
+    .admin-pedido-pie {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .admin-pedido-total-texto {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .admin-pedido-total-texto strong {
+      font-size: 20px;
+      color: var(--yellow);
+      margin-left: 6px;
+    }
+
+    .admin-pedido-control-estado {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-pedido-control-estado label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .select-estado-pedido {
+      min-height: 38px;
+      padding: 0 30px 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface-raised);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, #b9b8ad 50%), linear-gradient(135deg, #b9b8ad 50%, transparent 50%);
+      background-position: calc(100% - 15px) 16px, calc(100% - 10px) 16px;
+      background-repeat: no-repeat;
+      background-size: 5px 5px, 5px 5px;
+      transition: border-color 150ms ease;
+    }
+
+    .select-estado-pedido:focus {
+      border-color: var(--yellow);
+      outline: none;
+    }
+
+    .select-estado-pedido:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    /* Aviso de pedido en curso / éxito */
+    .aviso-pedido-enviado {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #4ade8015;
+      border: 1px solid #4ade8038;
+      color: #93e8b0;
+      font-size: 13px;
+      line-height: 1.5;
+      animation: fadeIn 200ms ease;
+    }
   </style>
 </head>
 <body>
@@ -1855,6 +2240,8 @@
             </div>
             <p class="ayuda">Se abrirá WhatsApp con el resumen listo para enviar. El pedido se confirma al enviarlo desde WhatsApp. No se realizan pagos en esta página.</p>
             <button id="boton-whatsapp" class="boton boton-whatsapp" type="submit">Enviar pedido por WhatsApp <span aria-hidden="true">↗</span></button>
+            <div id="pedido-feedback" class="aviso-pedido-enviado" hidden role="status" aria-live="polite"></div>
+            <div id="pedido-error" class="alerta-error" style="margin-top: 12px;" hidden role="alert"></div>
           </form>
         </section>
       </div>
@@ -1865,7 +2252,7 @@
         <button class="boton-atras" type="button" onclick="irA('inicio')" aria-label="Volver al inicio">←</button>
         <div>
           <span class="eyebrow">Panel de control</span>
-          <h1 id="titulo-admin" class="titulo-vista" tabindex="-1">Gestionar menú</h1>
+          <h1 id="titulo-admin" class="titulo-vista" tabindex="-1">Panel de administración</h1>
         </div>
       </div>
 
@@ -1880,76 +2267,113 @@
       </div>
 
       <div class="admin-aviso-seguridad">
-        <strong>Panel protegido:</strong> Conexión con Firebase Authentication activa. Las operaciones de productos se gestionan y protegen con las reglas de seguridad de Firestore.
+        <strong>Panel protegido:</strong> Conexión con Firebase Authentication y Firestore activa. Los pedidos y productos se sincronizan en tiempo real con reglas de seguridad.
       </div>
 
-      <div class="seccion-cabecera">
-        <h2>Productos</h2>
-        <button class="boton-secundario" type="button" onclick="restablecerMenu()">Restablecer menú original</button>
+      <nav class="admin-pestanas" role="tablist" aria-label="Secciones de administración">
+        <button id="pestana-admin-pedidos" class="admin-pestana activa" type="button" role="tab" aria-selected="true" onclick="cambiarPestanaAdmin('pedidos')">
+          <span>📋 Pedidos en tiempo real</span>
+          <span id="badge-pedidos-pendientes" class="badge-contador" hidden>0</span>
+        </button>
+        <button id="pestana-admin-productos" class="admin-pestana" type="button" role="tab" aria-selected="false" onclick="cambiarPestanaAdmin('productos')">
+          <span>🍔 Menú y productos</span>
+        </button>
+      </nav>
+
+      <!-- SECCIÓN DE PEDIDOS EN TIEMPO REAL -->
+      <div id="admin-seccion-pedidos" class="admin-seccion">
+        <div class="admin-pedidos-barra-sup">
+          <div class="admin-pedidos-live">
+            <span class="admin-pedidos-live-punto" aria-hidden="true"></span>
+            <span>En vivo · Firestore en tiempo real</span>
+          </div>
+          <span id="admin-pedidos-resumen-texto" class="ayuda">Cargando pedidos...</span>
+        </div>
+
+        <div class="admin-pedidos-filtros" role="toolbar" aria-label="Filtrar pedidos por estado">
+          <button class="filtro-pedido activo" type="button" data-estado-filtro="Todos" onclick="filtrarPedidosAdmin('Todos')">Todos (<span id="conteo-filtro-todos">0</span>)</button>
+          <button class="filtro-pedido" type="button" data-estado-filtro="Pendiente" onclick="filtrarPedidosAdmin('Pendiente')">⏳ Pendientes (<span id="conteo-filtro-pendiente">0</span>)</button>
+          <button class="filtro-pedido" type="button" data-estado-filtro="Aceptado" onclick="filtrarPedidosAdmin('Aceptado')">✓ Aceptados (<span id="conteo-filtro-aceptado">0</span>)</button>
+          <button class="filtro-pedido" type="button" data-estado-filtro="Preparando" onclick="filtrarPedidosAdmin('Preparando')">🍳 Preparando (<span id="conteo-filtro-preparando">0</span>)</button>
+          <button class="filtro-pedido" type="button" data-estado-filtro="En camino" onclick="filtrarPedidosAdmin('En camino')">🛵 En camino (<span id="conteo-filtro-encamino">0</span>)</button>
+          <button class="filtro-pedido" type="button" data-estado-filtro="Entregado" onclick="filtrarPedidosAdmin('Entregado')">✅ Entregados (<span id="conteo-filtro-entregado">0</span>)</button>
+        </div>
+
+        <div id="admin-pedidos-lista" class="admin-pedidos-lista" aria-live="polite">
+          <div class="admin-pedidos-vacio">Conectando con Firestore para escuchar pedidos en tiempo real...</div>
+        </div>
       </div>
-      <div id="admin-lista" class="admin-lista"></div>
 
-      <details id="admin-agregar" class="admin-agregar">
-        <summary>＋ Añadir producto</summary>
-        <form id="formulario-nuevo-producto" class="admin-agregar-form">
-          <div class="campo">
-            <label for="nuevo-nombre">Nombre</label>
-            <input id="nuevo-nombre" name="nombre" type="text" maxlength="60" required>
-          </div>
-          <div class="campo">
-            <label for="nuevo-precio">Precio</label>
-            <input id="nuevo-precio" name="precio" type="number" min="0.01" step="0.01" required>
-          </div>
-          <div class="campo">
-            <label for="nuevo-descripcion">Descripción</label>
-            <input id="nuevo-descripcion" name="descripcion" type="text" maxlength="180" required>
-          </div>
-          <div class="campo campo-imagen-upload">
-            <label for="nuevo-imagen">Imagen del producto</label>
-            
-            <div class="subida-imagen-bloque">
-              <!-- Vista previa de la imagen -->
-              <div id="nuevo-preview-contenedor" class="subida-preview-caja" hidden>
-                <img id="nuevo-preview-img" src="" alt="Vista previa del nuevo producto" class="subida-preview-img">
-                <button type="button" class="subida-preview-quitar" onclick="quitarImagenNuevoProducto()" aria-label="Quitar imagen seleccionada" title="Quitar imagen">✕</button>
-              </div>
+      <!-- SECCIÓN DE MENÚ Y PRODUCTOS -->
+      <div id="admin-seccion-productos" class="admin-seccion" hidden>
+        <div class="seccion-cabecera">
+          <h2>Productos del menú</h2>
+          <button class="boton-secundario" type="button" onclick="restablecerMenu()">Restablecer menú original</button>
+        </div>
+        <div id="admin-lista" class="admin-lista"></div>
 
-              <!-- Selector de archivo desde el dispositivo -->
-              <div class="subida-acciones">
-                <label class="boton-subir-archivo" id="nuevo-label-archivo">
-                  <input type="file" id="nuevo-archivo" accept="image/jpeg,image/png,image/webp,image/gif" hidden onchange="manejarSubidaImagenNuevo(this)">
-                  <span class="subida-icono" aria-hidden="true">📷</span>
-                  <span id="nuevo-subida-texto">Subir foto desde el dispositivo</span>
-                </label>
-                <span class="subida-separador">o ingresa el enlace directo:</span>
-              </div>
-
-              <!-- Campo URL (se auto-rellena con Cloudinary o permite ingreso manual) -->
-              <input id="nuevo-imagen" name="imagen" type="url" placeholder="https://res.cloudinary.com/..." required oninput="actualizarPreviewManualNuevo(this.value)">
-
-              <!-- Indicador de carga -->
-              <div id="nuevo-progreso" class="subida-progreso" hidden role="status" aria-live="polite">
-                <span class="subida-spinner" aria-hidden="true"></span>
-                <span id="nuevo-progreso-texto">Subiendo imagen a Cloudinary...</span>
-              </div>
-
-              <!-- Mensajes de error -->
-              <div id="nuevo-subida-error" class="subida-error" hidden role="alert"></div>
+        <details id="admin-agregar" class="admin-agregar">
+          <summary>＋ Añadir producto</summary>
+          <form id="formulario-nuevo-producto" class="admin-agregar-form">
+            <div class="campo">
+              <label for="nuevo-nombre">Nombre</label>
+              <input id="nuevo-nombre" name="nombre" type="text" maxlength="60" required>
             </div>
-          </div>
-          <div class="campo">
-            <label for="nuevo-categoria">Categoría</label>
-            <input id="nuevo-categoria" name="categoria" type="text" list="categorias-sugeridas" maxlength="40" required>
-            <datalist id="categorias-sugeridas">
-              <option value="Tacos"></option>
-              <option value="Hamburguesas"></option>
-              <option value="Acompañamientos"></option>
-            </datalist>
-          </div>
-          <button class="boton" type="submit">Añadir al menú</button>
-        </form>
-      </details>
-      <p id="admin-estado" class="admin-estado" role="status" aria-live="polite"></p>
+            <div class="campo">
+              <label for="nuevo-precio">Precio</label>
+              <input id="nuevo-precio" name="precio" type="number" min="0.01" step="0.01" required>
+            </div>
+            <div class="campo">
+              <label for="nuevo-descripcion">Descripción</label>
+              <input id="nuevo-descripcion" name="descripcion" type="text" maxlength="180" required>
+            </div>
+            <div class="campo campo-imagen-upload">
+              <label for="nuevo-imagen">Imagen del producto</label>
+              
+              <div class="subida-imagen-bloque">
+                <!-- Vista previa de la imagen -->
+                <div id="nuevo-preview-contenedor" class="subida-preview-caja" hidden>
+                  <img id="nuevo-preview-img" src="" alt="Vista previa del nuevo producto" class="subida-preview-img">
+                  <button type="button" class="subida-preview-quitar" onclick="quitarImagenNuevoProducto()" aria-label="Quitar imagen seleccionada" title="Quitar imagen">✕</button>
+                </div>
+
+                <!-- Selector de archivo desde el dispositivo -->
+                <div class="subida-acciones">
+                  <label class="boton-subir-archivo" id="nuevo-label-archivo">
+                    <input type="file" id="nuevo-archivo" accept="image/jpeg,image/png,image/webp,image/gif" hidden onchange="manejarSubidaImagenNuevo(this)">
+                    <span class="subida-icono" aria-hidden="true">📷</span>
+                    <span id="nuevo-subida-texto">Subir foto desde el dispositivo</span>
+                  </label>
+                  <span class="subida-separador">o ingresa el enlace directo:</span>
+                </div>
+
+                <!-- Campo URL (se auto-rellena con Cloudinary o permite ingreso manual) -->
+                <input id="nuevo-imagen" name="imagen" type="url" placeholder="https://res.cloudinary.com/..." required oninput="actualizarPreviewManualNuevo(this.value)">
+
+                <!-- Indicador de carga -->
+                <div id="nuevo-progreso" class="subida-progreso" hidden role="status" aria-live="polite">
+                  <span class="subida-spinner" aria-hidden="true"></span>
+                  <span id="nuevo-progreso-texto">Subiendo imagen a Cloudinary...</span>
+                </div>
+
+                <!-- Mensajes de error -->
+                <div id="nuevo-subida-error" class="subida-error" hidden role="alert"></div>
+              </div>
+            </div>
+            <div class="campo">
+              <label for="nuevo-categoria">Categoría</label>
+              <input id="nuevo-categoria" name="categoria" type="text" list="categorias-sugeridas" maxlength="40" required>
+              <datalist id="categorias-sugeridas">
+                <option value="Tacos"></option>
+                <option value="Hamburguesas"></option>
+                <option value="Acompañamientos"></option>
+              </datalist>
+            </div>
+            <button class="boton" type="submit">Añadir al menú</button>
+          </form>
+        </details>
+        <p id="admin-estado" class="admin-estado" role="status" aria-live="polite"></p>
+      </div>
     </section>
   </main>
 
@@ -3122,6 +3546,9 @@
       });
 
       vistaActual = vista;
+      if (vista === "admin" && window.iniciarEscuchaPedidos && window.usuarioAdminActual && window.usuarioAdminActual.autorizado) {
+        window.iniciarEscuchaPedidos();
+      }
       if (vista !== "admin" && vista !== "detalle") {
         document.getElementById("nav-interior").dataset.active =
           vista === "carrito" ? "carrito" : "inicio";
@@ -3298,7 +3725,44 @@
       guardarDatosCliente();
     }
 
-    function pedir() {
+    let guardandoPedido = false;
+
+    window.cambiarPestanaAdmin = function(pestana) {
+      const seccionPedidos = document.getElementById("admin-seccion-pedidos");
+      const seccionProductos = document.getElementById("admin-seccion-productos");
+      const tabPedidos = document.getElementById("pestana-admin-pedidos");
+      const tabProductos = document.getElementById("pestana-admin-productos");
+
+      if (pestana === "pedidos") {
+        if (seccionPedidos) seccionPedidos.hidden = false;
+        if (seccionProductos) seccionProductos.hidden = true;
+        if (tabPedidos) {
+          tabPedidos.classList.add("activa");
+          tabPedidos.setAttribute("aria-selected", "true");
+        }
+        if (tabProductos) {
+          tabProductos.classList.remove("activa");
+          tabProductos.setAttribute("aria-selected", "false");
+        }
+      } else {
+        if (seccionPedidos) seccionPedidos.hidden = true;
+        if (seccionProductos) seccionProductos.hidden = false;
+        if (tabPedidos) {
+          tabPedidos.classList.remove("activa");
+          tabPedidos.setAttribute("aria-selected", "false");
+        }
+        if (tabProductos) {
+          tabProductos.classList.add("activa");
+          tabProductos.setAttribute("aria-selected", "true");
+        }
+      }
+    };
+
+    async function pedir() {
+      if (guardandoPedido) {
+        return; // Prevenir envíos duplicados por clics múltiples
+      }
+
       if (!productos || productos.length === 0) {
         alert("Tu carrito está vacío. Agrega al menos un producto para realizar tu pedido.");
         irA("inicio");
@@ -3310,6 +3774,18 @@
       const tipoEntregaSelect = document.getElementById("tipo-entrega");
       const direccionInput = document.getElementById("direccion");
       const observacionesInput = document.getElementById("observaciones-pedido");
+      const botonWhatsapp = document.getElementById("boton-whatsapp");
+      const feedbackBox = document.getElementById("pedido-feedback");
+      const errorBox = document.getElementById("pedido-error");
+
+      if (feedbackBox) {
+        feedbackBox.hidden = true;
+        feedbackBox.textContent = "";
+      }
+      if (errorBox) {
+        errorBox.hidden = true;
+        errorBox.textContent = "";
+      }
 
       const nombre = (nombreInput ? nombreInput.value : "").trim();
       const telefono = (telefonoInput ? telefonoInput.value : "").trim();
@@ -3344,14 +3820,72 @@
 
       guardarDatosCliente();
 
+      // Bloquear botón e iniciar guardado en Firestore para evitar pedidos duplicados
+      guardandoPedido = true;
+      if (botonWhatsapp) {
+        botonWhatsapp.disabled = true;
+        botonWhatsapp.innerHTML = '<span>Guardando pedido en el sistema...</span>';
+      }
+
+      const snapshotProductos = productos.map(producto => ({
+        nombre: producto.nombre,
+        precio: Number(producto.precio),
+        cantidad: Number(producto.cantidad),
+        subtotal: Number((producto.precio * producto.cantidad).toFixed(2))
+      }));
+      const totalPedido = Number(total.toFixed(2));
+
+      const datosPedido = {
+        cliente: nombre,
+        telefono: telefono,
+        tipoEntrega: tipoEntrega,
+        direccion: tipoEntrega === "domicilio" ? direccion : "",
+        observaciones: observaciones,
+        productos: snapshotProductos,
+        total: totalPedido,
+        estado: "Pendiente", // Estado inicial: pendiente de confirmación por el negocio
+        fecha: new Date().toISOString()
+      };
+
+      let pedidoId = "";
+      try {
+        if (!window.guardarPedidoFirestore) {
+          throw new Error("El servicio de base de datos Firestore no está disponible.");
+        }
+        pedidoId = await window.guardarPedidoFirestore(datosPedido);
+      } catch (error) {
+        console.error("Error al registrar pedido en Firestore:", error);
+        guardandoPedido = false;
+        if (botonWhatsapp) {
+          botonWhatsapp.disabled = false;
+          botonWhatsapp.innerHTML = 'Enviar pedido por WhatsApp <span aria-hidden="true">↗</span>';
+        }
+        const errorMsg = "No se pudo registrar tu pedido en el sistema: " + (error.message || error) + ".\n\nEl pedido NO se envió por WhatsApp para evitar inconsistencias. Por favor, comprueba tu conexión e inténtalo de nuevo.";
+        if (errorBox) {
+          errorBox.textContent = errorMsg;
+          errorBox.hidden = false;
+        }
+        alert(errorMsg);
+        return; // DETENER: no abrir WhatsApp si falla el guardado
+      }
+
+      // Guardado exitoso: Generar mensaje de WhatsApp con referencia
+      const refPedido = pedidoId ? pedidoId.slice(0, 8).toUpperCase() : "";
       const lineas = [
         "👋 ¡Hola! Quiero realizar el siguiente pedido en *Domingo Food*:",
-        "",
+        ""
+      ];
+
+      if (refPedido) {
+        lineas.push("🔖 *Ref. Pedido:* #" + refPedido);
+      }
+
+      lineas.push(
         "📋 *DATOS DEL CLIENTE*",
         "• *Nombre:* " + nombre,
         "• *Teléfono:* " + telefono,
         "• *Modalidad:* " + (tipoEntrega === "domicilio" ? "Entrega a domicilio 🛵" : "Retiro en el local 🏪")
-      ];
+      );
 
       if (tipoEntrega === "domicilio") {
         lineas.push("• *Dirección:* " + direccion);
@@ -3366,16 +3900,16 @@
         "🛒 *DETALLE DEL PEDIDO*"
       );
 
-      productos.forEach(producto => {
-        const subtotal = producto.precio * producto.cantidad;
+      snapshotProductos.forEach(producto => {
         lineas.push(
-          "• " + producto.cantidad + "x " + producto.nombre + " — $" + producto.precio.toFixed(2) + " c/u ($" + subtotal.toFixed(2) + ")"
+          "• " + producto.cantidad + "x " + producto.nombre + " — $" + producto.precio.toFixed(2) + " c/u ($" + producto.subtotal.toFixed(2) + ")"
         );
       });
 
       lineas.push(
         "",
-        "💰 *TOTAL A PAGAR:* $" + total.toFixed(2),
+        "💰 *TOTAL A PAGAR:* $" + totalPedido.toFixed(2),
+        "⏳ *Estado:* Pendiente de confirmación por el negocio",
         "",
         "Quedo a la espera de su confirmación. ¡Muchas gracias!"
       );
@@ -3390,6 +3924,20 @@
         "_blank",
         "noopener,noreferrer"
       );
+
+      // Vaciar carrito tras guardado exitoso para prevenir duplicados
+      vaciarCarrito();
+
+      if (feedbackBox) {
+        feedbackBox.innerHTML = "<strong>✓ ¡Pedido registrado con éxito!</strong><br>Código de referencia: <code>#" + (refPedido || "PENDIENTE") + "</code>.<br>Estado: <strong>Pendiente de aceptación por el negocio</strong>.<br>Se abrió WhatsApp con el resumen de tu compra.";
+        feedbackBox.hidden = false;
+      }
+
+      guardandoPedido = false;
+      if (botonWhatsapp) {
+        botonWhatsapp.disabled = true; // El carrito ya está vacío
+        botonWhatsapp.innerHTML = 'Enviar pedido por WhatsApp <span aria-hidden="true">↗</span>';
+      }
     }
 
     document.getElementById("buscador").addEventListener("input", renderizarProductos);
@@ -3523,6 +4071,319 @@
       return false;
     }
 
+    const NOMBRE_COLECCION_PEDIDOS = "pedidos";
+    let unsubscribePedidos = null;
+    let pedidosLista = [];
+    let filtroEstadoActual = "Todos";
+
+    // Registrar pedido en la colección 'pedidos' de Firestore
+    window.guardarPedidoFirestore = async function(datos) {
+      const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
+      if (!firestoreDb) await obtenerFirebase();
+
+      const docRef = await addDoc(collection(firestoreDb, NOMBRE_COLECCION_PEDIDOS), {
+        ...datos,
+        creadoEn: serverTimestamp()
+      });
+      return docRef.id;
+    };
+
+    // Actualizar estado de un pedido (Solo administradores autenticados)
+    window.actualizarEstadoPedidoFirestore = async function(pedidoId, nuevoEstado) {
+      if (!window.usuarioAdminActual || !window.usuarioAdminActual.autorizado) {
+        throw new Error("Acceso no autorizado: debes iniciar sesión como administrador.");
+      }
+      const { doc, updateDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
+      if (!firestoreDb) await obtenerFirebase();
+
+      const docRef = doc(firestoreDb, NOMBRE_COLECCION_PEDIDOS, pedidoId);
+      await updateDoc(docRef, {
+        estado: nuevoEstado,
+        actualizadoEn: serverTimestamp()
+      });
+    };
+
+    // Iniciar escucha en tiempo real de los pedidos (onSnapshot)
+    function iniciarEscuchaPedidos() {
+      if (unsubscribePedidos) return;
+      import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js").then(async ({ collection, onSnapshot }) => {
+        if (!firestoreDb) await obtenerFirebase();
+        const pedidosCol = collection(firestoreDb, NOMBRE_COLECCION_PEDIDOS);
+
+        unsubscribePedidos = onSnapshot(pedidosCol, snapshot => {
+          pedidosLista = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+
+          // Ordenar cronológicamente descendente (más nuevos primero)
+          pedidosLista.sort((a, b) => {
+            const tA = a.creadoEn ? (a.creadoEn.toMillis ? a.creadoEn.toMillis() : new Date(a.creadoEn).getTime()) : (a.fecha ? new Date(a.fecha).getTime() : 0);
+            const tB = b.creadoEn ? (b.creadoEn.toMillis ? b.creadoEn.toMillis() : new Date(b.creadoEn).getTime()) : (b.fecha ? new Date(b.fecha).getTime() : 0);
+            return tB - tA;
+          });
+
+          renderizarPedidosAdmin();
+        }, error => {
+          console.error("Error al escuchar pedidos en tiempo real:", error);
+          const listaElem = document.getElementById("admin-pedidos-lista");
+          if (listaElem) {
+            const codigo = error.code === "permission-denied"
+              ? "Permiso denegado: Comprueba que el usuario tenga rol de administrador en Firestore y que las reglas de seguridad estén publicadas."
+              : (error.message || String(error));
+            listaElem.innerHTML = '<div class="alerta-error">Error al conectar con los pedidos en tiempo real: ' + escapeHtml(codigo) + '</div>';
+          }
+        });
+      }).catch(err => {
+        console.error("Error al importar módulo de Firestore para pedidos:", err);
+      });
+    }
+
+    // Detener escucha en tiempo real de pedidos
+    function detenerEscuchaPedidos() {
+      if (unsubscribePedidos) {
+        unsubscribePedidos();
+        unsubscribePedidos = null;
+      }
+      pedidosLista = [];
+      const listaElem = document.getElementById("admin-pedidos-lista");
+      if (listaElem) {
+        listaElem.innerHTML = '<div class="admin-pedidos-vacio">Inicia sesión como administrador para consultar los pedidos en tiempo real.</div>';
+      }
+      const badgePendientes = document.getElementById("badge-pedidos-pendientes");
+      if (badgePendientes) {
+        badgePendientes.hidden = true;
+      }
+    }
+
+    function formatearFecha(fechaValor, creadoEn) {
+      let d = null;
+      if (creadoEn && typeof creadoEn.toDate === "function") {
+        d = creadoEn.toDate();
+      } else if (fechaValor) {
+        d = new Date(fechaValor);
+      }
+      if (!d || isNaN(d.getTime())) {
+        return "Fecha reciente";
+      }
+      return d.toLocaleString("es-MX", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function renderizarPedidosAdmin() {
+      const listaElem = document.getElementById("admin-pedidos-lista");
+      const resumenTexto = document.getElementById("admin-pedidos-resumen-texto");
+      const badgePendientes = document.getElementById("badge-pedidos-pendientes");
+
+      const conteos = {
+        Todos: pedidosLista.length,
+        Pendiente: 0,
+        Aceptado: 0,
+        Preparando: 0,
+        "En camino": 0,
+        Entregado: 0
+      };
+
+      pedidosLista.forEach(p => {
+        if (conteos[p.estado] !== undefined) {
+          conteos[p.estado]++;
+        }
+      });
+
+      const elTodos = document.getElementById("conteo-filtro-todos");
+      const elPend = document.getElementById("conteo-filtro-pendiente");
+      const elAcep = document.getElementById("conteo-filtro-aceptado");
+      const elPrep = document.getElementById("conteo-filtro-preparando");
+      const elCam = document.getElementById("conteo-filtro-encamino");
+      const elEnt = document.getElementById("conteo-filtro-entregado");
+
+      if (elTodos) elTodos.textContent = conteos.Todos;
+      if (elPend) elPend.textContent = conteos.Pendiente;
+      if (elAcep) elAcep.textContent = conteos.Aceptado;
+      if (elPrep) elPrep.textContent = conteos.Preparando;
+      if (elCam) elCam.textContent = conteos["En camino"];
+      if (elEnt) elEnt.textContent = conteos.Entregado;
+
+      if (badgePendientes) {
+        badgePendientes.textContent = conteos.Pendiente;
+        badgePendientes.hidden = conteos.Pendiente === 0;
+      }
+
+      if (resumenTexto) {
+        resumenTexto.textContent = `${conteos.Todos} ${conteos.Todos === 1 ? "pedido registrado" : "pedidos registrados"} · ${conteos.Pendiente} pendientes`;
+      }
+
+      if (!listaElem) return;
+
+      const pedidosFiltrados = filtroEstadoActual === "Todos"
+        ? pedidosLista
+        : pedidosLista.filter(p => p.estado === filtroEstadoActual);
+
+      if (pedidosFiltrados.length === 0) {
+        listaElem.innerHTML = `<div class="admin-pedidos-vacio">No hay pedidos ${filtroEstadoActual !== "Todos" ? 'con estado "' + escapeHtml(filtroEstadoActual) + '"' : "registrados aún en Firestore"}.</div>`;
+        return;
+      }
+
+      listaElem.innerHTML = "";
+
+      pedidosFiltrados.forEach(pedido => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "admin-pedido-tarjeta";
+        tarjeta.id = "pedido-card-" + pedido.id;
+
+        const ref = pedido.id.slice(0, 8).toUpperCase();
+        const fechaFormateada = formatearFecha(pedido.fecha, pedido.creadoEn);
+        const estadoClase = "estado-" + (pedido.estado || "pendiente").toLowerCase().replace(/\s+/g, "");
+
+        const cabecera = document.createElement("div");
+        cabecera.className = "admin-pedido-cabecera";
+        cabecera.innerHTML = `
+          <div class="admin-pedido-id-grupo">
+            <span class="admin-pedido-ref">#${ref}</span>
+            <span class="admin-pedido-fecha">${fechaFormateada}</span>
+          </div>
+          <span class="badge-estado ${estadoClase}">${escapeHtml(pedido.estado || "Pendiente")}</span>
+        `;
+
+        const cuerpo = document.createElement("div");
+        cuerpo.className = "admin-pedido-cuerpo";
+
+        const clienteBloque = document.createElement("div");
+        clienteBloque.className = "admin-pedido-cliente-bloque";
+
+        const telLimpio = (pedido.telefono || "").replace(/\D/g, "");
+        const telLink = telLimpio
+          ? `<a class="admin-pedido-telefono-link" href="tel:${telLimpio}">${escapeHtml(pedido.telefono)}</a> · <a class="admin-pedido-telefono-link" href="https://wa.me/${telLimpio}" target="_blank" rel="noopener">WhatsApp</a>`
+          : escapeHtml(pedido.telefono || "Sin teléfono");
+
+        const entregaTexto = pedido.tipoEntrega === "domicilio"
+          ? `🛵 <strong>Entrega a domicilio:</strong> ${escapeHtml(pedido.direccion || "Dirección no indicada")}`
+          : `🏪 <strong>Retiro en el local</strong>`;
+
+        let htmlCliente = `
+          <div><span class="dato-icono">👤</span><strong>Cliente:</strong> ${escapeHtml(pedido.cliente || "Anónimo")}</div>
+          <div><span class="dato-icono">📞</span><strong>Teléfono:</strong> ${telLink}</div>
+          <div><span class="dato-icono">📍</span>${entregaTexto}</div>
+        `;
+
+        if (pedido.observaciones && pedido.observaciones.trim() !== "") {
+          htmlCliente += `
+            <div class="admin-pedido-obs-caja">
+              <strong>Observaciones:</strong> ${escapeHtml(pedido.observaciones)}
+            </div>
+          `;
+        }
+        clienteBloque.innerHTML = htmlCliente;
+
+        const itemsBloque = document.createElement("div");
+        itemsBloque.className = "admin-pedido-items-bloque";
+        let htmlItems = `<div class="admin-pedido-items-titulo">Productos (${(pedido.productos || []).length})</div>`;
+
+        (pedido.productos || []).forEach(prod => {
+          const subtotal = prod.subtotal !== undefined
+            ? prod.subtotal
+            : (prod.precio * prod.cantidad);
+          htmlItems += `
+            <div class="admin-pedido-item-fila">
+              <span><strong>${prod.cantidad}x</strong> ${escapeHtml(prod.nombre)}</span>
+              <span>$${Number(subtotal).toFixed(2)}</span>
+            </div>
+          `;
+        });
+        itemsBloque.innerHTML = htmlItems;
+
+        cuerpo.append(clienteBloque, itemsBloque);
+
+        const pie = document.createElement("div");
+        pie.className = "admin-pedido-pie";
+
+        const totalDiv = document.createElement("div");
+        totalDiv.className = "admin-pedido-total-texto";
+        totalDiv.innerHTML = `Total del pedido: <strong>$${Number(pedido.total || 0).toFixed(2)}</strong>`;
+
+        const controlEstado = document.createElement("div");
+        controlEstado.className = "admin-pedido-control-estado";
+
+        const labelEstado = document.createElement("label");
+        labelEstado.htmlFor = "select-estado-" + pedido.id;
+        labelEstado.textContent = "Estado:";
+
+        const selectEstado = document.createElement("select");
+        selectEstado.id = "select-estado-" + pedido.id;
+        selectEstado.className = "select-estado-pedido";
+        selectEstado.setAttribute("aria-label", "Cambiar estado del pedido #" + ref);
+
+        const opcionesEstado = [
+          { valor: "Pendiente", texto: "⏳ Pendiente" },
+          { valor: "Aceptado", texto: "✓ Aceptado" },
+          { valor: "Preparando", texto: "🍳 Preparando" },
+          { valor: "En camino", texto: "🛵 En camino" },
+          { valor: "Entregado", texto: "✅ Entregado" }
+        ];
+
+        opcionesEstado.forEach(op => {
+          const option = document.createElement("option");
+          option.value = op.valor;
+          option.textContent = op.texto;
+          if (pedido.estado === op.valor) {
+            option.selected = true;
+          }
+          selectEstado.appendChild(option);
+        });
+
+        selectEstado.addEventListener("change", () => {
+          window.manejarCambioEstadoPedido(pedido.id, selectEstado.value, selectEstado);
+        });
+
+        controlEstado.append(labelEstado, selectEstado);
+        pie.append(totalDiv, controlEstado);
+
+        tarjeta.append(cabecera, cuerpo, pie);
+        listaElem.appendChild(tarjeta);
+      });
+    }
+
+    window.filtrarPedidosAdmin = function(estado) {
+      filtroEstadoActual = estado;
+      document.querySelectorAll(".filtro-pedido").forEach(btn => {
+        btn.classList.toggle("activo", btn.dataset.estadoFiltro === estado);
+      });
+      renderizarPedidosAdmin();
+    };
+
+    window.manejarCambioEstadoPedido = async function(pedidoId, nuevoEstado, selectElem) {
+      if (!confirm(`¿Deseas cambiar el estado del pedido a "${nuevoEstado}"?`)) {
+        if (selectElem) {
+          const pedido = pedidosLista.find(p => p.id === pedidoId);
+          if (pedido) selectElem.value = pedido.estado;
+        }
+        return;
+      }
+
+      if (selectElem) selectElem.disabled = true;
+
+      try {
+        await window.actualizarEstadoPedidoFirestore(pedidoId, nuevoEstado);
+      } catch (err) {
+        console.error("Error al actualizar estado del pedido:", err);
+        alert("Error al actualizar estado en Firestore: " + (err.message || err));
+        if (selectElem) {
+          const pedido = pedidosLista.find(p => p.id === pedidoId);
+          if (pedido) selectElem.value = pedido.estado;
+        }
+      } finally {
+        if (selectElem) selectElem.disabled = false;
+      }
+    };
+
+    window.iniciarEscuchaPedidos = iniciarEscuchaPedidos;
+    window.detenerEscuchaPedidos = detenerEscuchaPedidos;
+
     // Funciones de administración expuestas para sincronizar con Firestore
     window.guardarProductoFirestore = async function(id, datos) {
       const { doc, updateDoc } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js");
@@ -3568,6 +4429,7 @@
     };
 
     window.ejecutarLogoutAdmin = async function() {
+      detenerEscuchaPedidos();
       try {
         const { signOut } = await import("https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js");
         if (!authInstance) await obtenerFirebase();
@@ -3638,6 +4500,7 @@
             autorizado: true
           };
           actualizarAdminUI(user);
+          iniciarEscuchaPedidos();
           cerrarModalLoginAdmin();
           irA("admin");
         } catch (error) {
@@ -3681,7 +4544,9 @@
                 autorizado: true
               };
               actualizarAdminUI(user);
+              iniciarEscuchaPedidos();
             } else {
+              detenerEscuchaPedidos();
               await signOut(authInstance);
               window.usuarioAdminActual = null;
               actualizarAdminUI(null);
@@ -3690,6 +4555,7 @@
               }
             }
           } else {
+            detenerEscuchaPedidos();
             window.usuarioAdminActual = null;
             actualizarAdminUI(null);
             if (vistaActual === "admin") {
