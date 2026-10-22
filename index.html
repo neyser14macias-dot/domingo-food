@@ -3273,6 +3273,8 @@
       if (!producto) {
         return;
       }
+      if (!Number.isSafeInteger(delta) || !Number.isSafeInteger(producto.cantidad)) return;
+      if (delta > 0 && producto.cantidad >= Number.MAX_SAFE_INTEGER) return;
       const nuevaCantidad = producto.cantidad + delta;
       if (nuevaCantidad <= 0) {
         productos.splice(indice, 1);
@@ -3437,13 +3439,15 @@
       }
 
       renderizarFiltros();
-      const consulta = document.getElementById("buscador").value.trim().toLocaleLowerCase("es");
+      const normalizarBusqueda = texto => String(texto).normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es");
+      const consulta = normalizarBusqueda(document.getElementById("buscador").value.trim());
       const coincidencias = MENU.filter(producto => {
         const coincideCategoria =
           categoriaActual === "Todos" || producto.categoria === categoriaActual;
         const coincideBusqueda =
           (producto.nombre + " " + producto.descripcion + " " + producto.categoria)
-            .toLocaleLowerCase("es")
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es")
             .includes(consulta);
         return coincideCategoria && coincideBusqueda;
       });
